@@ -1,14 +1,19 @@
 package emprestes.game.sudoku.domain;
 
+import emprestes.game.sudoku.domain.exception.PositionException;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
-public interface Board {
+import java.io.Serializable;
+
+public interface Board extends Serializable {
 
     void init(InitRegion action);
 
     void start();
 
-    void play(Integer number, Position position) throws WrongPositionException;
+    void play(Character value, byte regionNumber, byte rowNumber, byte columnNumber) throws PositionException;
+
+    void play(Character value, Position position) throws WrongPositionException;
 
     boolean isGameOver();
 
