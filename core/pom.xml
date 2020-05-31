@@ -23,6 +23,7 @@
   <dependency>
    <groupId>junit</groupId>
    <artifactId>junit</artifactId>
+   <version>${junit4.version}</version>
    <scope>test</scope>
   </dependency>
 
@@ -30,6 +31,7 @@
   <dependency>
    <groupId>junit-addons</groupId>
    <artifactId>junit-addons</artifactId>
+   <version>${junit4-addons.version}</version>
    <scope>test</scope>
   </dependency>
  </dependencies>
