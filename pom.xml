@@ -107,6 +107,7 @@
  <modules>
   <module>core-api</module>
   <module>core</module>
+  <module>service-api</module>
  </modules>
 
  <dependencyManagement>
