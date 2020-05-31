@@ -14,7 +14,11 @@ public interface BoardService {
 
     void start();
 
-    void play(Character value, Integer region, Integer row, Integer column) throws PositionException;
+    void play(Character value, Byte region, Byte row, Byte column) throws PositionException;
+
+    default void play(Character value, Integer region, Integer row, Integer column) throws PositionException {
+        play(value, region.byteValue(), row.byteValue(), column.byteValue());
+    }
 
     void play(Character value, Position position) throws WrongPositionException;
 
