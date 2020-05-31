@@ -44,7 +44,8 @@ public class GameView extends JFrame {
     }
 
     private void init() {
-        setSize(400, 400);
+        // FIXME Use dimension coming from service
+        setSize(700, 700);
         setLocationRelativeTo(null);
         setResizable(Boolean.FALSE);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

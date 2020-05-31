@@ -7,17 +7,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-// Inheritance
 public class GameMenuBar extends JMenuBar {
 
-    // What is it?
     private static final long serialVersionUID = -1619051870761232426L;
 
-    // State
     private JMenu game;
     private JMenuItem exit;
 
-    // Default constructor
     public GameMenuBar() {
         super();
 
@@ -26,7 +22,6 @@ public class GameMenuBar extends JMenuBar {
         initView();
     }
 
-    // Behaviour
     private void initComponents() {
         this.game = new JMenu("Game");
         this.exit = new JMenuItem("Exit");

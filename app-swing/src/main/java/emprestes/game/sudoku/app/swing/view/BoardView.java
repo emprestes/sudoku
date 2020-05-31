@@ -26,6 +26,7 @@ public class BoardView extends JPanel {
     }
 
     private void init() {
+        // FIXME Use dimension coming from service
         setLayout(new GridLayout(0, 3));
     }
 

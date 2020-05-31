@@ -11,26 +11,21 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 
-// Inheritance
 public class ExitAction extends WindowAdapter implements ActionListener {
 
-    // State
     private final Component component;
 
-    // Composition
     public ExitAction(Component component) {
         super();
 
         this.component = component;
     }
 
-    // [overwritten] Behaviour
     @Override
     public void actionPerformed(ActionEvent event) {
         close(event);
     }
 
-    // [overwritten] Behaviour
     @Override
     public void windowClosing(WindowEvent event) {
         close(event);
