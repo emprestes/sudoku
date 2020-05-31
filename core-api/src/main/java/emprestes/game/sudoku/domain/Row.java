@@ -1,10 +1,22 @@
 package emprestes.game.sudoku.domain;
 
-import emprestes.game.sudoku.domain.exception.WrongPositionException;
+import java.io.Serializable;
 
-public interface Row {
+public interface Row extends Serializable, Comparable<Row> {
+
+    Byte getNumber();
 
     void add(Position position);
 
-    void play(Integer number) throws WrongPositionException;
+    int getSizePositions();
+
+    boolean isCompleted();
+
+    boolean contains(Character value);
+
+    boolean equals(byte number);
+
+    default boolean equals(Byte number) {
+        return equals(number.byteValue());
+    }
 }

@@ -2,13 +2,37 @@ package emprestes.game.sudoku.domain;
 
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
-public interface Position {
+import java.io.Serializable;
 
-    void play(Integer number) throws WrongPositionException;
+public interface Position extends Serializable, Comparable<Position> {
 
-    boolean isEmpty();
+    Region getRegion();
 
-    default boolean isNotEmpty() {
-        return !isEmpty();
+    Row getRow();
+
+    Column getColumn();
+
+    Character getValue();
+
+    void setValue(Character value);
+
+    void play(Character value) throws WrongPositionException;
+
+    boolean contains(Character value);
+
+    boolean isValid();
+
+    boolean isVisible();
+
+    void setVisible(boolean visible);
+
+    default boolean isInvalid() {
+        return !isValid();
     }
+
+    default boolean isInvisible() {
+        return !isVisible();
+    }
+
+    boolean equals(byte regionNumber, byte rowNumber, byte columnNumber);
 }

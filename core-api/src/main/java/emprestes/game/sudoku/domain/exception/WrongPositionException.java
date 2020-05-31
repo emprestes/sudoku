@@ -1,10 +1,12 @@
 package emprestes.game.sudoku.domain.exception;
 
-public class WrongPositionException extends Exception {
+import static java.lang.String.format;
+
+public class WrongPositionException extends PositionException {
 
     private static final long serialVersionUID = -8413260296869926676L;
 
-    public WrongPositionException(String message) {
-        super(message);
+    public WrongPositionException(String formatMessage, Object... values) {
+        super(format(formatMessage, values));
     }
 }
