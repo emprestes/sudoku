@@ -96,7 +96,9 @@
   </plugins>
  </build>
 
- <modules />
+ <modules>
+  <module>service-api</module>
+ </modules>
 
  <dependencies>
   <dependency>
