@@ -7,6 +7,8 @@ public interface Region extends Serializable, Comparable<Region> {
 
     Byte getNumber();
 
+    Byte getSide();
+
     boolean equals(byte number);
 
     default boolean equals(Byte number) {
