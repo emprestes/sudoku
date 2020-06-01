@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static emprestes.game.sudoku.domain.Dimension.D3X3;
 import static java.util.Optional.ofNullable;
 
 public final class SudokuBoard implements Board {
@@ -26,7 +27,7 @@ public final class SudokuBoard implements Board {
     private final List<Region> regionList;
 
     public SudokuBoard() {
-        this(Dimension.D3X3);
+        this(D3X3);
     }
 
     public SudokuBoard(Dimension dimension) {
@@ -34,6 +35,11 @@ public final class SudokuBoard implements Board {
 
         this.regionList = new ArrayList<>(dimension.size);
         this.dimension = dimension;
+    }
+
+    @Override
+    public Byte getSide() {
+        return dimension.side;
     }
 
     @Override
