@@ -8,11 +8,11 @@ public enum Dimension {
     private static final byte ONE = 1;
 
     public final Byte size;
-    private final Byte multiplicity;
+    public final Byte side;
     private final int[] ascii;
 
-    Dimension(int multiplicity, int... ascii) {
-        this.multiplicity = (byte) multiplicity;
+    Dimension(int side, int... ascii) {
+        this.side = (byte) side;
         this.size = (byte) ascii.length;
         this.ascii = ascii;
     }
@@ -22,7 +22,7 @@ public enum Dimension {
     }
 
     public Byte to() {
-        return multiplicity;
+        return side;
     }
 
     public Byte generateIndex() {
@@ -47,18 +47,18 @@ public enum Dimension {
             return ONE;
         }
 
-        return (byte) (ONE + ((regionNumber % multiplicity) * multiplicity));
+        return (byte) (ONE + ((regionNumber % side) * side));
     }
 
     public Byte nextFromRow(Byte row, Byte regionNumber) {
-        if ((regionNumber % multiplicity) == ZERO) {
-            return (byte) (regionNumber + ((row % multiplicity)));
+        if ((regionNumber % side) == ZERO) {
+            return (byte) (regionNumber + ((row % side)));
         }
 
         return row;
     }
 
     public Byte nextTo(Byte value) {
-        return (byte) (value + multiplicity - 1);
+        return (byte) (value + side - 1);
     }
 }
