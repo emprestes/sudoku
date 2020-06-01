@@ -10,6 +10,8 @@ public interface BoardService {
 
     Board getBoard();
 
+    Byte getSide();
+
     void start(InitRegion action);
 
     void start();
