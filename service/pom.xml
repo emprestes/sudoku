@@ -10,7 +10,7 @@
  <modelVersion>4.0.0</modelVersion>
 
  <artifactId>sudoku-service</artifactId>
- <name>[EMPCS][sudoku] Service module</name>
+ <name>[EMP][sudoku] Service module</name>
 
  <dependencies>
   <dependency>
