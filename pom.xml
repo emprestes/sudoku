@@ -8,7 +8,7 @@
  <artifactId>sudoku</artifactId>
  <version>1.0-SNAPSHOT</version>
  <packaging>pom</packaging>
- <name>[EMPCS] Sudoku Game Project</name>
+ <name>[EMP] Sudoku Game Project</name>
  <url>https://github.com/emprestes/sudoku</url>
  <inceptionYear>2020</inceptionYear>
 

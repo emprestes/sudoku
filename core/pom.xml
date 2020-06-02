@@ -10,7 +10,7 @@
  <modelVersion>4.0.0</modelVersion>
 
  <artifactId>sudoku-core</artifactId>
- <name>[EMPCS][sudoku] Core module</name>
+ <name>[EMP][sudoku] Core module</name>
 
  <dependencies>
   <dependency>
