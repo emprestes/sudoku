@@ -18,6 +18,11 @@ public final class DefaultBoardService implements BoardService {
     }
 
     @Override
+    public Byte getSide() {
+        return board.getSide();
+    }
+
+    @Override
     public Board getBoard() {
         return board;
     }
