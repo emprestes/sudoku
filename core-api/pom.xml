@@ -10,6 +10,6 @@
  <modelVersion>4.0.0</modelVersion>
 
  <artifactId>sudoku-core-api</artifactId>
- <name>[EMPCS][sudoku] Core API</name>
+ <name>[EMP][sudoku] Core API</name>
 
 </project>
