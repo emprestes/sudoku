@@ -1,6 +1,5 @@
 package emprestes.game.sudoku.app.swing.view;
 
-import emprestes.game.sudoku.domain.Region;
 import emprestes.game.sudoku.service.BoardService;
 
 import javax.swing.JPanel;
@@ -22,15 +21,10 @@ public class BoardView extends JPanel {
     }
 
     private void initView() {
-        service.start(this::add);
+        service.start(region -> add(new RegionView(region)));
     }
 
     private void init() {
-        // FIXME Use dimension coming from service
-        setLayout(new GridLayout(0, 3));
-    }
-
-    private void add(Region region) {
-        add(new RegionView(region));
+        setLayout(new GridLayout(0, service.getSide()));
     }
 }

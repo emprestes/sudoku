@@ -3,11 +3,11 @@ package emprestes.game.sudoku.app.swing.view;
 import emprestes.game.sudoku.app.swing.component.PositionButton;
 import emprestes.game.sudoku.domain.Region;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 
 import static java.util.Optional.ofNullable;
+import static javax.swing.BorderFactory.createRaisedSoftBevelBorder;
 
 public class RegionView extends JPanel {
 
@@ -25,13 +25,13 @@ public class RegionView extends JPanel {
     }
 
     private void init() {
-        // FIXME Use dimension coming from service
-        setLayout(new GridLayout(0, 3));
-        setBorder(BorderFactory.createRaisedSoftBevelBorder());
+        setLayout(new GridLayout(0, region.getSide()));
+        setBorder(createRaisedSoftBevelBorder());
     }
 
     public void initComponents() {
         ofNullable(region)
                 .ifPresent(_region -> _region.init(position -> add(new PositionButton(position))));
     }
+
 }
