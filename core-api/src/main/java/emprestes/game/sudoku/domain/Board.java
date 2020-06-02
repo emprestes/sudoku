@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 public interface Board extends Serializable {
 
+    Byte getSide();
+
     void init(InitRegion action);
 
     void start();

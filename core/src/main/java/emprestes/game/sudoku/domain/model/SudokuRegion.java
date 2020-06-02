@@ -47,6 +47,11 @@ final class SudokuRegion implements Region {
     }
 
     @Override
+    public Byte getSide() {
+        return dimension.side;
+    }
+
+    @Override
     public void init() {
         for (Position position : positions) {
             final char value = dimension.generateValue();
