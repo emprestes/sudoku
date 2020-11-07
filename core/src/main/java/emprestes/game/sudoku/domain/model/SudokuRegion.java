@@ -2,17 +2,17 @@ package emprestes.game.sudoku.domain.model;
 
 import emprestes.game.sudoku.domain.Column;
 import emprestes.game.sudoku.domain.Dimension;
-import emprestes.game.sudoku.domain.InitPosition;
 import emprestes.game.sudoku.domain.Position;
 import emprestes.game.sudoku.domain.Region;
 import emprestes.game.sudoku.domain.Row;
+import emprestes.game.sudoku.domain.SymbolValues;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static emprestes.game.sudoku.domain.Dimension.D3X3;
 import static java.util.Optional.ofNullable;
@@ -23,7 +23,7 @@ final class SudokuRegion implements Region {
 
     private final byte number;
     private final Dimension dimension;
-    private final Set<Position> positions;
+    private final List<Position> positions;
     private final List<Column> columns;
     private final List<Row> rows;
 
@@ -36,7 +36,7 @@ final class SudokuRegion implements Region {
 
         this.number = number;
         this.dimension = dimension;
-        this.positions = new TreeSet<>();
+        this.positions = new ArrayList<>(dimension.side);
         this.columns = new ArrayList<>(dimension.size);
         this.rows = new ArrayList<>(dimension.size);
     }
@@ -52,23 +52,8 @@ final class SudokuRegion implements Region {
     }
 
     @Override
-    public void init() {
-        for (Position position : positions) {
-            final char value = dimension.generateValue();
-
-            if (contains(value)) {
-                continue;
-            }
-
-            position.setValue(value);
-            position.setVisible(dimension.generateVisibility());
-        }
-    }
-
-    @Override
-    public void init(InitPosition action) {
-        init();
-        positions.forEach(action::init);
+    public void init(Consumer<Position> action) {
+        positions.forEach(action);
     }
 
     @Override
@@ -80,9 +65,17 @@ final class SudokuRegion implements Region {
         return isCompleted && isCompletedRow && isCompletedColumn;
     }
 
+    private boolean isBlank(Position position, Character value) {
+        return position.isBlank()
+                && position.notInRegion(value)
+                && position.notInRow(value)
+                && position.notInColumn(value);
+    }
+
     @Override
     public boolean contains(Character value) {
         return positions.stream()
+                .filter(Position::nonBlank)
                 .map(Position::getValue)
                 .anyMatch(_value -> _value.equals(value));
     }
@@ -123,6 +116,27 @@ final class SudokuRegion implements Region {
         return dimension.nextTo(value);
     }
 
+    @Override
+    public Character[] toArrayValues() {
+        return positions.stream()
+                .map(Position::getValue)
+                .filter(value -> !SymbolValues.BLANK.equals(value))
+                .toArray(Character[]::new);
+    }
+
+    @Override
+    public void clear() {
+        positions.forEach(Position::clear);
+    }
+
+    @Override
+    public void init(Character value) {
+         positions.stream()
+                 .filter(position -> isBlank(position, value))
+                 .findAny()
+                 .ifPresent(position -> position.setValue(value));
+    }
+
     private Column newColumn(byte number) {
         return add(new SudokuColumn(number));
     }
@@ -143,6 +157,11 @@ final class SudokuRegion implements Region {
     @Override
     public boolean existsRow(byte number) {
         return getRow(number).isPresent();
+    }
+
+    @Override
+    public Stream<Row> getRows() {
+        return rows.stream();
     }
 
     @Override

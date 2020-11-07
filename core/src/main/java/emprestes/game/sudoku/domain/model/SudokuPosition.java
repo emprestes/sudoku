@@ -6,8 +6,11 @@ import emprestes.game.sudoku.domain.Region;
 import emprestes.game.sudoku.domain.Row;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
 import static java.lang.String.format;
 
 final class SudokuPosition implements Position {
@@ -32,7 +35,7 @@ final class SudokuPosition implements Position {
         this.region = region;
         this.row = row;
         this.column = column;
-        this.value = ' ';
+        this.value = BLANK;
         this.visible = false;
         this.valid = false;
     }
@@ -48,13 +51,36 @@ final class SudokuPosition implements Position {
     }
 
     @Override
+    public Byte getRowNumber() {
+        return getRow().getNumber();
+    }
+
+    @Override
     public Column getColumn() {
         return column;
     }
 
     @Override
+    public Byte getColumnNumber() {
+        return getColumn().getNumber();
+    }
+
+    @Override
     public Character getValue() {
         return value;
+    }
+
+    @Override
+    public Character[] getAllExistSymbols() {
+        final List<Character> allValues = new ArrayList<>();
+
+        allValues.addAll(region.getAllValues());
+        allValues.addAll(row.getAllValues());
+        allValues.addAll(column.getAllValues());
+
+        return allValues.stream()
+                .distinct()
+                .toArray(Character[]::new);
     }
 
     @Override
@@ -66,7 +92,7 @@ final class SudokuPosition implements Position {
     public void play(Character value) throws WrongPositionException {
         valid = this.value.equals(value);
 
-        if (isInvalid()) {
+        if (isInvalidFor(value)) {
             throw new WrongPositionException("Wrong position: %s", this);
         }
 
@@ -75,13 +101,33 @@ final class SudokuPosition implements Position {
     }
 
     @Override
-    public boolean contains(Character value) {
-        return row.contains(value) || column.contains(value);
+    public boolean inColumn(Character value) {
+        return column.contains(value);
     }
 
     @Override
-    public boolean isValid() {
-        return valid;
+    public boolean inRow(Character value) {
+        return row.contains(value);
+    }
+
+    @Override
+    public boolean inRegion(Character value) {
+        return region.contains(value);
+    }
+
+    @Override
+    public void clear() {
+        setValue(BLANK);
+    }
+
+    @Override
+    public boolean isBlank() {
+        return BLANK.equals(value);
+    }
+
+    @Override
+    public boolean isValidFor(Character value) {
+        return notInRegion(value) && notInRow(value) && notInColumn(value);
     }
 
     @Override
@@ -134,6 +180,6 @@ final class SudokuPosition implements Position {
 
     @Override
     public String toString() {
-        return format("%s %s %s -> %s", region, row, column, getValue());
+        return format("%s %s %s -> %s (%s)", region, row, column, getValue(), isVisible());
     }
 }

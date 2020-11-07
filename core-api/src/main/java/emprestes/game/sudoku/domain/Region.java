@@ -2,6 +2,11 @@ package emprestes.game.sudoku.domain;
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import static java.util.Set.of;
 
 public interface Region extends Serializable, Comparable<Region> {
 
@@ -15,9 +20,11 @@ public interface Region extends Serializable, Comparable<Region> {
         return equals(number.byteValue());
     }
 
-    void init();
+    void clear();
 
-    void init(InitPosition action);
+    void init(Character value);
+
+    void init(Consumer<Position> action);
 
     boolean contains(Character value);
 
@@ -51,6 +58,8 @@ public interface Region extends Serializable, Comparable<Region> {
         return !existsRow(number);
     }
 
+    Stream<Row> getRows();
+
     Row getRowBy(byte number);
 
     Row getRowOr(byte number, Row actualRow);
@@ -70,4 +79,10 @@ public interface Region extends Serializable, Comparable<Region> {
     byte nextFromRow(byte row, byte regionIndex);
 
     byte nextTo(byte value);
+
+    Character[] toArrayValues();
+
+    default Set<Character> getAllValues() {
+        return of(toArrayValues());
+    }
 }

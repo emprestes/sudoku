@@ -2,6 +2,7 @@ package emprestes.game.sudoku.domain.model;
 
 import emprestes.game.sudoku.domain.Column;
 import emprestes.game.sudoku.domain.Position;
+import emprestes.game.sudoku.domain.SymbolValues;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,22 @@ final class SudokuColumn implements Column {
         this.positions = new ArrayList<>();
     }
 
+    @Override
+    public boolean isBlank() {
+        return positions.stream().allMatch(Position::isBlank);
+    }
+
+    @Override
     public Byte getNumber() {
         return number;
+    }
+
+    @Override
+    public Character[] toArrayValues() {
+        return positions.stream()
+                .map(Position::getValue)
+                .filter(value -> !SymbolValues.BLANK.equals(value))
+                .toArray(Character[]::new);
     }
 
     @Override
@@ -44,6 +59,7 @@ final class SudokuColumn implements Column {
     @Override
     public boolean contains(Character value) {
         return positions.stream()
+                .filter(Position::nonBlank)
                 .map(Position::getValue)
                 .anyMatch(_value -> _value.equals(value));
     }
