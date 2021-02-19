@@ -3,10 +3,10 @@ package emprestes.game.sudoku.domain.model;
 import emprestes.game.sudoku.domain.Board;
 import emprestes.game.sudoku.domain.Column;
 import emprestes.game.sudoku.domain.Dimension;
-import emprestes.game.sudoku.domain.InitRegion;
 import emprestes.game.sudoku.domain.Position;
 import emprestes.game.sudoku.domain.Region;
 import emprestes.game.sudoku.domain.Row;
+import emprestes.game.sudoku.domain.SymbolValues;
 import emprestes.game.sudoku.domain.exception.PositionException;
 import emprestes.game.sudoku.domain.exception.PositionNotFoundException;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static emprestes.game.sudoku.domain.Dimension.D3X3;
 import static java.util.Optional.ofNullable;
@@ -24,6 +26,7 @@ public final class SudokuBoard implements Board {
     private static final long serialVersionUID = 5804390727980289178L;
 
     private final Dimension dimension;
+    private final SymbolValues possibleSymbols;
     private final List<Region> regionList;
 
     public SudokuBoard() {
@@ -33,8 +36,19 @@ public final class SudokuBoard implements Board {
     public SudokuBoard(Dimension dimension) {
         super();
 
-        this.regionList = new ArrayList<>(dimension.size);
         this.dimension = dimension;
+        this.possibleSymbols = dimension.possibleSymbolValues;
+        this.regionList = new ArrayList<>(dimension.size);
+
+        init();
+    }
+
+    private void init() {
+        init(regionList::add);
+    }
+
+    private Stream<Region> getRegionList() {
+        return regionList.stream();
     }
 
     @Override
@@ -43,7 +57,7 @@ public final class SudokuBoard implements Board {
     }
 
     @Override
-    public void init(InitRegion action) {
+    public void init(Consumer<Region> action) {
         ofNullable(action).ifPresent(_action -> {
             Column column = null;
             Row row = null;
@@ -73,7 +87,7 @@ public final class SudokuBoard implements Board {
                     }
                 }
 
-                _action.init(region);
+                _action.accept(region);
 
                 fromColumn = region.nextFromColumn(toColumn, regionNumber);
                 fromRow = region.nextFromRow(fromRow, regionNumber);
@@ -100,9 +114,29 @@ public final class SudokuBoard implements Board {
 
     @Override
     public void start() {
-        regionList.clear();
-        init(regionList::add);
-        regionList.forEach(Region::init);
+        clear();
+        initValues();
+    }
+
+    private void clear() {
+        regionList.forEach(Region::clear);
+    }
+
+    private void initValues() {
+        getRegionList()
+                .flatMap(Region::getRows)
+                .forEach(row -> row.forEach(this::initValueAt));
+    }
+
+    private void initValueAt(Position position) {
+        final Character[] existSymbols = position.getAllExistSymbols();
+        char symbol;
+
+        do {
+            symbol = possibleSymbols.generateNotIn(existSymbols);
+        } while (position.isInvalidFor(symbol));
+
+        position.setValue(symbol);
     }
 
     @Override

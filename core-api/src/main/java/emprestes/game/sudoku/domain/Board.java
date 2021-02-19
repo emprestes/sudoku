@@ -4,12 +4,13 @@ import emprestes.game.sudoku.domain.exception.PositionException;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 public interface Board extends Serializable {
 
     Byte getSide();
 
-    void init(InitRegion action);
+    void init(Consumer<Region> action);
 
     void start();
 
