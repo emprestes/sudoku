@@ -123,20 +123,35 @@ public final class SudokuBoard implements Board {
     }
 
     private void initValues() {
+        final List<Position> positions = new ArrayList<>();
         getRegionList()
                 .flatMap(Region::getRows)
-                .forEach(row -> row.forEach(this::initValueAt));
+                .forEach(row -> row.forEach(positions::add));
+
+        fillValuesBacktracking(positions, 0);
     }
 
-    private void initValueAt(Position position) {
-        final Character[] existSymbols = position.getAllExistSymbols();
-        char symbol;
+    private boolean fillValuesBacktracking(List<Position> positions, int index) {
+        if (index >= positions.size()) {
+            return true;
+        }
 
-        do {
-            symbol = possibleSymbols.generateNotIn(existSymbols);
-        } while (position.isInvalidFor(symbol));
+        final Position position = positions.get(index);
+        position.clear();
 
-        position.setValue(symbol);
+        final List<Character> candidates = possibleSymbols.shuffle().toList();
+        for (Character symbol : candidates) {
+            if (position.isInvalidFor(symbol)) {
+                continue;
+            }
+            position.setValue(symbol);
+            if (fillValuesBacktracking(positions, index + 1)) {
+                return true;
+            }
+            position.clear();
+        }
+
+        return false;
     }
 
     @Override
