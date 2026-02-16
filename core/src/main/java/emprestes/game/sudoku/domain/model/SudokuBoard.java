@@ -132,35 +132,9 @@ public final class SudokuBoard implements Board {
     }
 
     private void initValues() {
-        final List<Position> positions = new ArrayList<>();
-        getRegionList()
-                .flatMap(Region::getRows)
-                .forEach(row -> row.forEach(positions::add));
-
-        fillValuesBacktracking(positions, 0);
-    }
-
-    private boolean fillValuesBacktracking(List<Position> positions, int index) {
-        if (index >= positions.size()) {
-            return true;
-        }
-
-        final Position position = positions.get(index);
-        position.clear();
-
-        final List<Character> candidates = symbols.shuffle().toList();
-        for (Character symbol : candidates) {
-            if (position.isInvalidFor(symbol)) {
-                continue;
-            }
-            position.setValue(symbol);
-            if (fillValuesBacktracking(positions, index + 1)) {
-                return true;
-            }
-            position.clear();
-        }
-
-        return false;
+        symbols.forEach(value ->
+                regionList.forEach(region -> region.init(value))
+        );
     }
 
     @Override
@@ -254,23 +228,27 @@ public final class SudokuBoard implements Board {
                             // Calcular o número da região
                             byte regionNumber = (byte) (rowGroup * boxSize + colGroup + 1);
 
-                            // Obter o valor da posição usando coordenadas absolutas
+                            // Obter o valor da posição
                             Character value = ' ';
                             try {
+                                // Encontrar a região correta
                                 Optional<Region> region = regionList.stream()
-                                        .filter(r -> r.equals(regionNumber))
-                                        .findFirst();
+                                    .filter(r -> r.equals(regionNumber))
+                                    .findFirst();
 
                                 if (region.isPresent()) {
-                                    Optional<Position> position = region.get().getBy(rowNumber, colNumber);
+                                    // Obter a posição dentro da região
+                                    Optional<Position> position = region.get().getBy((byte) (rowInGroup + 1), (byte) (colInGroup + 1));
                                     if (position.isPresent()) {
                                         value = position.get().getValue();
+                                        // Se o valor for nulo ou zero, mostrar espaço em branco
                                         if (value == null || value == '0') {
                                             value = ' ';
                                         }
                                     }
                                 }
                             } catch (Exception e) {
+                                // Em caso de erro, mostrar espaço em branco
                                 value = ' ';
                             }
 
