@@ -19,11 +19,10 @@
    <version>${project.version}</version>
   </dependency>
 
-  <!-- JUnit 4 -->
+  <!-- JUnit 5 -->
   <dependency>
-   <groupId>junit</groupId>
-   <artifactId>junit</artifactId>
-   <version>${junit4.version}</version>
+   <groupId>org.junit.vintage</groupId>
+   <artifactId>junit-vintage-engine</artifactId>
    <scope>test</scope>
   </dependency>
 
@@ -31,7 +30,6 @@
   <dependency>
    <groupId>junit-addons</groupId>
    <artifactId>junit-addons</artifactId>
-   <version>${junit4-addons.version}</version>
    <scope>test</scope>
   </dependency>
  </dependencies>

@@ -4,6 +4,7 @@ import emprestes.game.sudoku.domain.Column;
 import emprestes.game.sudoku.domain.Position;
 import emprestes.game.sudoku.domain.SymbolValues;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import static java.util.Objects.hash;
 
 final class SudokuColumn implements Column {
 
+    @Serial
     private static final long serialVersionUID = -6502322659899442632L;
 
     private final byte number;

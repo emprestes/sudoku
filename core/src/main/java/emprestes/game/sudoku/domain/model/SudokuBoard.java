@@ -1,4 +1,4 @@
-package emprestes.game.sudoku.domain.model;
+    package emprestes.game.sudoku.domain.model;
 
 import emprestes.game.sudoku.domain.Board;
 import emprestes.game.sudoku.domain.Column;
@@ -11,6 +11,7 @@ import emprestes.game.sudoku.domain.exception.PositionException;
 import emprestes.game.sudoku.domain.exception.PositionNotFoundException;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,11 +24,13 @@ import static java.util.Optional.ofNullable;
 
 public final class SudokuBoard implements Board {
 
+    @Serial
     private static final long serialVersionUID = 5804390727980289178L;
 
     private final Dimension dimension;
-    private final SymbolValues possibleSymbols;
+    private final SymbolValues symbols;
     private final List<Region> regionList;
+
 
     public SudokuBoard() {
         this(D3X3);
@@ -37,7 +40,7 @@ public final class SudokuBoard implements Board {
         super();
 
         this.dimension = dimension;
-        this.possibleSymbols = dimension.possibleSymbolValues;
+        this.symbols = dimension.symbols;
         this.regionList = new ArrayList<>(dimension.size);
 
         init();
@@ -59,6 +62,7 @@ public final class SudokuBoard implements Board {
     @Override
     public void init(Consumer<Region> action) {
         ofNullable(action).ifPresent(_action -> {
+            Region region = null;
             Column column = null;
             Row row = null;
             byte fromRow, toRow, fromColumn, toColumn;
@@ -67,22 +71,27 @@ public final class SudokuBoard implements Board {
             toRow = toColumn = dimension.to();
 
             for (byte regionNumber = 1; regionNumber <= dimension.size; regionNumber++) {
-                final Region region = new SudokuRegion(regionNumber, dimension);
+                if (regionNumber == 1) {
+                    region = new SudokuRegion(regionNumber, dimension);
+                } else {
+                    region = region.next(regionNumber, dimension);
+                }
 
                 for (byte rowIndex = fromRow; rowIndex <= toRow; rowIndex++) {
                     final byte actualRowIndex = rowIndex;
                     final Row actualRow = row;
+                    final Region finalRegion = region;
                     row = getRow(rowIndex)
                             .filter(region::nonExistsRow)
                             .map(region::add)
-                            .orElseGet(() -> region.getRowOr(actualRowIndex, actualRow));
+                            .orElseGet(() -> finalRegion.getRowOr(actualRowIndex, actualRow));
                     for (byte columnIndex = fromColumn; columnIndex <= toColumn; columnIndex++) {
                         final byte actualColumnIndex = columnIndex;
                         final Column actualColumn = column;
                         column = getColumn(columnIndex)
                                 .filter(region::nonExistsColumn)
                                 .map(region::add)
-                                .orElseGet(() -> region.getColumnOr(actualColumnIndex, actualColumn));
+                                .orElseGet(() -> finalRegion.getColumnOr(actualColumnIndex, actualColumn));
                         region.createPositionFor(row, column);
                     }
                 }
@@ -123,20 +132,9 @@ public final class SudokuBoard implements Board {
     }
 
     private void initValues() {
-        getRegionList()
-                .flatMap(Region::getRows)
-                .forEach(row -> row.forEach(this::initValueAt));
-    }
-
-    private void initValueAt(Position position) {
-        final Character[] existSymbols = position.getAllExistSymbols();
-        char symbol;
-
-        do {
-            symbol = possibleSymbols.generateNotIn(existSymbols);
-        } while (position.isInvalidFor(symbol));
-
-        position.setValue(symbol);
+        symbols.forEach(value ->
+                regionList.forEach(region -> region.init(value))
+        );
     }
 
     @Override
@@ -192,10 +190,8 @@ public final class SudokuBoard implements Board {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SudokuBoard)) return false;
-        SudokuBoard that = (SudokuBoard) o;
-        return dimension == that.dimension &&
-                Objects.equals(regionList, that.regionList);
+        if (!(o instanceof SudokuBoard that)) return false;
+        return dimension == that.dimension && Objects.equals(regionList, that.regionList);
     }
 
     @Override
@@ -205,34 +201,77 @@ public final class SudokuBoard implements Board {
 
     @Override
     public String toString() {
-        // TODO Print the board using BoardDimension and list of region
-        return "\nSUDOKU                                                  SUDOKU\n" +
-                "    || [1]   [2]   [3]    [4]   [5]   [6]    [7]   [8]   [9] ||\n" +
-                "====++=====+=====+=====++=====+=====+=====++=====+=====+=====++\n" +
-                "    ||       [1]       ||       [2]       ||       [3]       ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[1] ||  1  |     |     ||     |     |  4  ||     |     |     ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[2] ||     |  5  |  8  ||     |     |     ||  2  |  7  |  6  ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[3] ||     |  9  |     ||     |  2  |  8  ||  1  |     |     ||\n" +
-                "    ++=====+=====+=====||=====+=====+=====||=====+=====+=====++\n" +
-                "    ||       [4]       ||       [5]       ||       [6]       ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[4] ||     |     |  4  ||     |  5  |     ||  7  |  6  |  1  ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[5] ||  6  |  7  |     ||  8  |     |  2  ||     |  5  |  4  ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[6] ||  5  |  3  |  1  ||     |  6  |     ||  8  |     |     ||\n" +
-                "    ++=====+=====+=====||=====+=====+=====||=====+=====+=====++\n" +
-                "    ||       [7]       ||       [8]       ||       [9]       ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[7] ||     |     |  2  ||  1  |  4  |     ||     |  8  |     ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[8] ||  8  |  1  |  7  ||     |     |     ||  4  |  3  |     ||\n" +
-                "    ||-----|-----|-----||-----|-----|-----||-----|-----|-----||\n" +
-                "[9] ||     |     |     ||  7  |     |     ||     |     |  2  ||\n" +
-                "====++=====+=====+=====++=====+=====+=====++=====+=====+=====++\n" +
-                "SUDOKU                                                   SUDOKU";
+        StringBuilder sb = new StringBuilder();
+        int boxSize = dimension.side;
+
+        // Criar a linha horizontal
+            String horizontalLine = createHorizontalLine(boxSize);
+
+            // Organizar as regiões por linhas
+            for (int rowGroup = 0; rowGroup < boxSize; rowGroup++) {
+                // Adicionar linha horizontal no início de cada grupo de linhas
+                sb.append(horizontalLine).append("\n");
+
+                // Para cada linha dentro do grupo
+                for (int rowInGroup = 0; rowInGroup < boxSize; rowInGroup++) {
+                    byte rowNumber = (byte) (rowGroup * boxSize + rowInGroup + 1);
+
+                    // Para cada grupo de colunas
+                    for (int colGroup = 0; colGroup < boxSize; colGroup++) {
+                        // Adicionar separador vertical no início de cada grupo
+                        sb.append("| ");
+
+                        // Para cada coluna dentro do grupo
+                        for (int colInGroup = 0; colInGroup < boxSize; colInGroup++) {
+                            byte colNumber = (byte) (colGroup * boxSize + colInGroup + 1);
+
+                            // Calcular o número da região
+                            byte regionNumber = (byte) (rowGroup * boxSize + colGroup + 1);
+
+                            // Obter o valor da posição
+                            Character value = ' ';
+                            try {
+                                // Encontrar a região correta
+                                Optional<Region> region = regionList.stream()
+                                    .filter(r -> r.equals(regionNumber))
+                                    .findFirst();
+
+                                if (region.isPresent()) {
+                                    // Obter a posição dentro da região
+                                    Optional<Position> position = region.get().getBy((byte) (rowInGroup + 1), (byte) (colInGroup + 1));
+                                    if (position.isPresent()) {
+                                        value = position.get().getValue();
+                                        // Se o valor for nulo ou zero, mostrar espaço em branco
+                                        if (value == null || value == '0') {
+                                            value = ' ';
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                // Em caso de erro, mostrar espaço em branco
+                                value = ' ';
+                            }
+
+                            sb.append(value).append(" ");
+                        }
+                    }
+                    // Fechar a linha com separador vertical
+                    sb.append("|\n");
+                }
+            }
+            // Adicionar linha horizontal no final
+            sb.append(horizontalLine);
+
+            return sb.toString();
+    }
+
+    private String createHorizontalLine(int boxSize) {
+        StringBuilder line = new StringBuilder();
+        for (int i = 0; i < boxSize; i++) {
+            line.append("+");
+            line.append("-".repeat(Math.max(0, boxSize * 2 + 1)));
+        }
+            line.append("+");
+        return line.toString();
     }
 }
