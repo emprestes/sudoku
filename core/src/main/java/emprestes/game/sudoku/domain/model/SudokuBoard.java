@@ -22,6 +22,10 @@ import java.util.stream.Stream;
 import static emprestes.game.sudoku.domain.Dimension.D3X3;
 import static java.util.Optional.ofNullable;
 
+/**
+ * Implementação de tabuleiro Sudoku com geração de valores por backtracking,
+ * garantindo preenchimento válido para a dimensão escolhida.
+ */
 public final class SudokuBoard implements Board {
 
     @Serial
@@ -132,9 +136,35 @@ public final class SudokuBoard implements Board {
     }
 
     private void initValues() {
-        symbols.forEach(value ->
-                regionList.forEach(region -> region.init(value))
-        );
+        final List<Position> positions = new ArrayList<>();
+        getRegionList()
+                .flatMap(Region::getRows)
+                .forEach(row -> row.forEach(positions::add));
+
+        fillValuesBacktracking(positions, 0);
+    }
+
+    private boolean fillValuesBacktracking(List<Position> positions, int index) {
+        if (index >= positions.size()) {
+            return true;
+        }
+
+        final Position position = positions.get(index);
+        position.clear();
+
+        final List<Character> candidates = symbols.shuffle().toList();
+        for (Character symbol : candidates) {
+            if (position.isInvalidFor(symbol)) {
+                continue;
+            }
+            position.setValue(symbol);
+            if (fillValuesBacktracking(positions, index + 1)) {
+                return true;
+            }
+            position.clear();
+        }
+
+        return false;
     }
 
     @Override
