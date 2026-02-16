@@ -8,9 +8,6 @@ import java.util.stream.Stream;
 
 import static java.util.Set.of;
 
-/**
- * Região (subgrade) do Sudoku, composta por linhas, colunas e posições.
- */
 public interface Region extends Serializable, Comparable<Region> {
 
     Byte getNumber();

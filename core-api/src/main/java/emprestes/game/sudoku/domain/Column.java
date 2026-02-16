@@ -5,9 +5,6 @@ import java.util.Set;
 
 import static java.util.Set.of;
 
-/**
- * Representa uma coluna de um tabuleiro de Sudoku.
- */
 public interface Column extends Serializable, Comparable<Column> {
 
     boolean isBlank();

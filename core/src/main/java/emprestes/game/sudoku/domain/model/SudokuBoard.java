@@ -22,14 +22,6 @@ import java.util.stream.Stream;
 import static emprestes.game.sudoku.domain.Dimension.D3X3;
 import static java.util.Optional.ofNullable;
 
-/**
- * Implementação de tabuleiro Sudoku com geração de valores por backtracking,
- * garantindo preenchimento válido para a dimensão escolhida.
- */
-/**
- * Implementação de tabuleiro de Sudoku com preenchimento inicial via backtracking
- * e operações de jogada/estado.
- */
 public final class SudokuBoard implements Board {
 
     @Serial
