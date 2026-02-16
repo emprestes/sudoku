@@ -262,27 +262,23 @@ public final class SudokuBoard implements Board {
                             // Calcular o número da região
                             byte regionNumber = (byte) (rowGroup * boxSize + colGroup + 1);
 
-                            // Obter o valor da posição
+                            // Obter o valor da posição usando coordenadas absolutas
                             Character value = ' ';
                             try {
-                                // Encontrar a região correta
                                 Optional<Region> region = regionList.stream()
-                                    .filter(r -> r.equals(regionNumber))
-                                    .findFirst();
+                                        .filter(r -> r.equals(regionNumber))
+                                        .findFirst();
 
                                 if (region.isPresent()) {
-                                    // Obter a posição dentro da região
-                                    Optional<Position> position = region.get().getBy((byte) (rowInGroup + 1), (byte) (colInGroup + 1));
+                                    Optional<Position> position = region.get().getBy(rowNumber, colNumber);
                                     if (position.isPresent()) {
                                         value = position.get().getValue();
-                                        // Se o valor for nulo ou zero, mostrar espaço em branco
                                         if (value == null || value == '0') {
                                             value = ' ';
                                         }
                                     }
                                 }
                             } catch (Exception e) {
-                                // Em caso de erro, mostrar espaço em branco
                                 value = ' ';
                             }
 
