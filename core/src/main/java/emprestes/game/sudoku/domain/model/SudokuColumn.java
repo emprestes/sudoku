@@ -10,6 +10,9 @@ import java.util.List;
 
 import static java.util.Objects.hash;
 
+/**
+ * Implementação concreta de uma coluna de Sudoku.
+ */
 final class SudokuColumn implements Column {
 
     @Serial

@@ -8,6 +8,9 @@ import java.io.Serializable;
  * Representa uma célula de Sudoku com coordenadas (região, linha, coluna),
  * valor atual e visibilidade, além de regras de validação.
  */
+/**
+ * Célula do Sudoku, com valor, visibilidade e regras de validação.
+ */
 public interface Position extends Serializable, Comparable<Position> {
 
     Region getRegion();

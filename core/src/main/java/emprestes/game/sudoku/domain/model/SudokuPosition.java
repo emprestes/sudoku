@@ -14,6 +14,9 @@ import java.util.Objects;
 import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
 import static java.lang.String.format;
 
+/**
+ * Implementação concreta de uma célula do tabuleiro.
+ */
 final class SudokuPosition implements Position {
 
     @Serial

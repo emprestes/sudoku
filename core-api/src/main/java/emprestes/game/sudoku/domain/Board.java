@@ -6,6 +6,10 @@ import emprestes.game.sudoku.domain.exception.WrongPositionException;
 import java.io.Serializable;
 import java.util.function.Consumer;
 
+/**
+ * Contrato de um tabuleiro de Sudoku, permitindo inicialização,
+ * jogadas e verificação de término de jogo.
+ */
 public interface Board extends Serializable {
 
     Byte getSide();
