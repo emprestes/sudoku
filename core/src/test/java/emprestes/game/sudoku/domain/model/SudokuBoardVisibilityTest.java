@@ -16,7 +16,7 @@ public class SudokuBoardVisibilityTest {
         SudokuBoard board = new SudokuBoard(Dimension.D3X3);
         int total = 81;
         Map<SudokuLevel, Double> ratios = Map.of(
-                SudokuLevel.EASY, 0.65,
+                SudokuLevel.EASY, 0.47,
                 SudokuLevel.MEDIUM, 0.50,
                 SudokuLevel.HARD, 0.40,
                 SudokuLevel.EXPERT, 0.35,
