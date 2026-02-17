@@ -20,6 +20,9 @@ import static java.util.Collections.shuffle;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Implementação concreta de uma região (subgrade) do tabuleiro.
+ */
 final class SudokuRegion implements Region {
 
     @Serial

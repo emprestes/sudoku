@@ -21,6 +21,9 @@ import static java.util.stream.Collectors.toList;
  * de embaralhamento e geração de valores não utilizados.
 >>>>>>> b227859 (#16 fix: use backtracking init with shuffled symbols)
  */
+/**
+ * Conjunto de símbolos permitidos por dimensão (ex.: 1-9 ou 1-9 + A-G).
+ */
 public enum SymbolValues {
     V9(49, 50, 51, 52, 53, 54, 55, 56, 57),
     V16(49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71);
