@@ -12,12 +12,12 @@ public enum Dimension {
 
     public final Byte size;
     public final Byte side;
-    public final SymbolValues possibleSymbolValues;
+    public final SymbolValues symbols;
 
-    Dimension(int side, SymbolValues possibleSymbolValues) {
+    Dimension(int side, SymbolValues symbols) {
         this.side = (byte) side;
-        this.size = possibleSymbolValues.size;
-        this.possibleSymbolValues = possibleSymbolValues;
+        this.size = symbols.size;
+        this.symbols = symbols;
     }
 
     public Byte from() {
@@ -29,7 +29,7 @@ public enum Dimension {
     }
 
     public Byte nextFromColumn(Byte column, Byte regionNumber) {
-        if (possibleSymbolValues.size.equals(column)) {
+        if (symbols.size.equals(column)) {
             return ONE;
         }
 

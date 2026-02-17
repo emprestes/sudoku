@@ -1,11 +1,10 @@
 package emprestes.game.sudoku.domain.model;
 
 import emprestes.game.sudoku.domain.Dimension;
-import org.junit.Ignore;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SudokuBoardTest {
 
@@ -24,7 +23,7 @@ public class SudokuBoardTest {
         assertTrue(board.isNotGameOver());
     }
 
-    @Ignore
+    @Test
     public void start4x4Test() {
         board = new SudokuBoard(Dimension.D4X4);
 

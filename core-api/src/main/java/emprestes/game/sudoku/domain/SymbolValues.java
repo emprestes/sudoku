@@ -23,7 +23,7 @@ public enum SymbolValues {
         this.size = (byte) ascii.length;
     }
 
-    public Stream<Character> shuffle( ) {
+    public Stream<Character> shuffle() {
         final List<Integer> available = stream(ascii).collect(toList());
         Collections.shuffle(available);
         return available.stream()

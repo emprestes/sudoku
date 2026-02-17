@@ -85,4 +85,6 @@ public interface Region extends Serializable, Comparable<Region> {
     default Set<Character> getAllValues() {
         return of(toArrayValues());
     }
+
+    Region next(byte regionNumber, Dimension dimension);
 }
