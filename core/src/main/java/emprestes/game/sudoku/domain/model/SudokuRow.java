@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * Implementação concreta de uma linha de Sudoku.
- */
 final class SudokuRow implements Row {
 
     @Serial

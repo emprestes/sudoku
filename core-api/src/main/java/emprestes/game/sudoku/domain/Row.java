@@ -6,9 +6,6 @@ import java.util.function.Consumer;
 
 import static java.util.Set.of;
 
-/**
- * Representa uma linha de um tabuleiro de Sudoku.
- */
 public interface Row extends Serializable, Comparable<Row> {
 
     boolean isBlank();

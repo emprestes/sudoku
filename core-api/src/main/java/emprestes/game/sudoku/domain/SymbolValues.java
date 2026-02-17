@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
+<<<<<<< HEAD
 /**
 <<<<<<< HEAD
  * Supported symbol sets for Sudoku (9 or 16 values) and generation helpers.
@@ -24,6 +25,8 @@ import static java.util.stream.Collectors.toList;
 /**
  * Conjunto de símbolos permitidos por dimensão (ex.: 1-9 ou 1-9 + A-G).
  */
+=======
+>>>>>>> cf1bd70 (#21 chore: remove javadocs and printlns from tests)
 public enum SymbolValues {
     V9(49, 50, 51, 52, 53, 54, 55, 56, 57),
     V16(49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71);
@@ -38,6 +41,7 @@ public enum SymbolValues {
         this.size = (byte) ascii.length;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     /** Shuffle the symbols and return a stream of characters. */
     public Stream<Character> shuffle() {
@@ -56,6 +60,8 @@ public enum SymbolValues {
     /**
      * Retorna um fluxo embaralhado dos símbolos desta dimensão.
      */
+=======
+>>>>>>> cf1bd70 (#21 chore: remove javadocs and printlns from tests)
     public Stream<Character> shuffle() {
         final List<Integer> available = stream(ascii).collect(toList());
         Collections.shuffle(available);
@@ -63,19 +69,19 @@ public enum SymbolValues {
                 .map(code -> (char) code.intValue());
     }
 
-    /**
-     * Itera sobre todos os símbolos desta dimensão.
-     */
     public void forEach(Consumer<Character> action) {
         stream(ascii)
                 .map(code -> (char) code.intValue())
                 .forEach(action);
     }
 
+<<<<<<< HEAD
     /**
      * Gera um símbolo que não está presente na lista informada.
      */
 >>>>>>> b227859 (#16 fix: use backtracking init with shuffled symbols)
+=======
+>>>>>>> cf1bd70 (#21 chore: remove javadocs and printlns from tests)
     public Character generateNotIn(Character... values) {
         return generateNotIn(stream(values)
                 .filter(Objects::nonNull)
