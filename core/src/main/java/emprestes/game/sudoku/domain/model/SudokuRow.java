@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * Implementação concreta de Row.
+ * Concrete Row implementation.
  *
  * @author Dude
  * @since 02/2026

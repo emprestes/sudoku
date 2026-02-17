@@ -1,7 +1,7 @@
 package emprestes.game.sudoku.domain;
 
 /**
- * Callback funcional para atribuir valor inicial a uma posição.
+ * Functional callback to assign an initial value to a position.
  *
  * @author Dude
  * @since 02/2026
@@ -9,6 +9,6 @@ package emprestes.game.sudoku.domain;
 @FunctionalInterface
 public interface InitPosition {
 
-    /** Inicializa a posição fornecida. */
+    /** Initialize the provided position. */
     void init(Position position);
 }

@@ -9,45 +9,45 @@ import java.util.stream.Stream;
 import static java.util.Set.of;
 
 /**
- * Região (subgrade) do Sudoku, contendo linhas, colunas e posições.
+ * Sudoku region (sub-grid) containing rows, columns, and positions.
  *
  * @author Dude
  * @since 02/2026
  */
 public interface Region extends Serializable, Comparable<Region> {
 
-    /** @return identificador da região (1-based). */
+    /** @return region identifier (1-based). */
     Byte getNumber();
 
-    /** @return lado da subgrade (ex.: 3 para 3x3). */
+    /** @return side length of the sub-grid (e.g., 3 for 3x3). */
     Byte getSide();
 
-    /** @return true se o número informado é o da região. */
+    /** @return true if the given number matches this region. */
     boolean equals(byte number);
 
     default boolean equals(Byte number) {
         return equals(number.byteValue());
     }
 
-    /** Limpa posições. */
+    /** Clear positions. */
     void clear();
 
-    /** Inicializa com um valor. */
+    /** Initialize with a value. */
     void init(Character value);
 
-    /** Executa ação em cada posição. */
+    /** Execute an action on each position. */
     void init(Consumer<Position> action);
 
-    /** @return true se contém o valor. */
+    /** @return true if contains the value. */
     boolean contains(Character value);
 
-    /** @return true se todas posições estão preenchidas. */
+    /** @return true if all positions are filled. */
     boolean isCompleted();
 
-    /** Cria posição para linha/coluna fornecidas. */
+    /** Create a position for the given row/column. */
     void createPositionFor(Row row, Column column);
 
-    /** Obtém posição pelas coordenadas. */
+    /** Get a position by coordinates. */
     Optional<Position> getBy(byte rowNumber, byte columnNumber);
 
     Column add(Column column);
@@ -96,13 +96,13 @@ public interface Region extends Serializable, Comparable<Region> {
 
     byte nextTo(byte value);
 
-    /** @return valores não vazios da região. */
+    /** @return non-blank values in the region. */
     Character[] toArrayValues();
 
     default Set<Character> getAllValues() {
         return of(toArrayValues());
     }
 
-    /** Cria a próxima região encadeada na dimensão fornecida. */
+    /** Create the next chained region in the given dimension. */
     Region next(byte regionNumber, Dimension dimension);
 }

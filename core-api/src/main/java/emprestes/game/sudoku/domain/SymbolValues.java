@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
 >>>>>>> cf1bd70 (#21 chore: remove javadocs and printlns from tests)
 =======
 /**
- * Conjuntos de símbolos suportados pelo Sudoku (9 ou 16 valores) e utilitários de geração.
+ * Supported symbol sets for Sudoku (9 or 16 values) and generation helpers.
  *
  * @author Dude
  * @since 02/2026
@@ -50,6 +50,7 @@ public enum SymbolValues {
         this.size = (byte) ascii.length;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -75,6 +76,9 @@ public enum SymbolValues {
 =======
     /** Embaralha os símbolos e retorna fluxo de caracteres. */
 >>>>>>> b453373 (#22 docs: add full javadocs with author/since)
+=======
+    /** Shuffle the symbols and return a stream of characters. */
+>>>>>>> ffa3885 (#22 docs: translate javadocs to English)
     public Stream<Character> shuffle() {
         final List<Integer> available = stream(ascii).collect(toList());
         Collections.shuffle(available);
@@ -82,13 +86,14 @@ public enum SymbolValues {
                 .map(code -> (char) code.intValue());
     }
 
-    /** Itera sobre todos os símbolos desta dimensão. */
+    /** Iterate all symbols in this dimension. */
     public void forEach(Consumer<Character> action) {
         stream(ascii)
                 .map(code -> (char) code.intValue())
                 .forEach(action);
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     /**
@@ -100,6 +105,9 @@ public enum SymbolValues {
 =======
     /** Gera símbolo que não esteja nos valores informados. */
 >>>>>>> b453373 (#22 docs: add full javadocs with author/since)
+=======
+    /** Generate a symbol that is not in the provided list. */
+>>>>>>> ffa3885 (#22 docs: translate javadocs to English)
     public Character generateNotIn(Character... values) {
         return generateNotIn(stream(values)
                 .filter(Objects::nonNull)

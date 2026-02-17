@@ -15,7 +15,7 @@ import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
 import static java.lang.String.format;
 
 /**
- * Implementação concreta de Position.
+ * Concrete Position implementation.
  *
  * @author Dude
  * @since 02/2026

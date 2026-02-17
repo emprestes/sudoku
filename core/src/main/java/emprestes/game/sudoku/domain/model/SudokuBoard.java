@@ -23,7 +23,7 @@ import static emprestes.game.sudoku.domain.Dimension.D3X3;
 import static java.util.Optional.ofNullable;
 
 /**
- * Implementação concreta de Board com preenchimento inicial via backtracking.
+ * Concrete Board implementation with initial fill using backtracking.
  *
  * @author Dude
  * @since 02/2026

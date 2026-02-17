@@ -1,7 +1,7 @@
 package emprestes.game.sudoku.domain;
 
 /**
- * Callback funcional para inicializar uma região ao construir o tabuleiro.
+ * Functional callback to initialize a region when building the board.
  *
  * @author Dude
  * @since 02/2026
@@ -9,6 +9,6 @@ package emprestes.game.sudoku.domain;
 @FunctionalInterface
 public interface InitRegion {
 
-    /** Inicializa a região fornecida. */
+    /** Initialize the provided region. */
     void init(Region region);
 }

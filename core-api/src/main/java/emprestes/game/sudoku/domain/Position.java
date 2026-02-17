@@ -5,45 +5,45 @@ import emprestes.game.sudoku.domain.exception.WrongPositionException;
 import java.io.Serializable;
 
 /**
- * Representa uma célula de Sudoku com coordenadas, valor e regras de validação/visibilidade.
+ * Represents a Sudoku cell with coordinates, value, and validation/visibility rules.
  *
  * @author Dude
  * @since 02/2026
  */
 public interface Position extends Serializable, Comparable<Position> {
 
-    /** @return região da posição. */
+    /** @return the region. */
     Region getRegion();
 
-    /** @return linha da posição. */
+    /** @return the row. */
     Row getRow();
 
-    /** @return número da linha (1-based). */
+    /** @return row number (1-based). */
     Byte getRowNumber();
 
-    /** @return coluna da posição. */
+    /** @return the column. */
     Column getColumn();
 
-    /** @return número da coluna (1-based). */
+    /** @return column number (1-based). */
     Byte getColumnNumber();
 
-    /** @return valor atual da posição. */
+    /** @return current value. */
     Character getValue();
 
-    /** @return todos os símbolos já presentes em região/linha/coluna. */
+    /** @return all symbols already present in region/row/column. */
     Character[] getAllExistSymbols();
 
-    /** Define valor da posição. */
+    /** Set the value. */
     void setValue(Character value);
 
     default void setValue(Value value) {
         setValue(value.getSymbol());
     }
 
-    /** Executa jogada com validação de regras. */
+    /** Play a value with validation. */
     void play(Character value) throws WrongPositionException;
 
-    /** @return true se o valor está na coluna. */
+    /** @return true if value exists in column. */
     boolean inColumn(Character value);
 
     default boolean notInColumn(Value value) {
@@ -54,7 +54,7 @@ public interface Position extends Serializable, Comparable<Position> {
         return !inColumn(value);
     }
 
-    /** @return true se o valor está na linha. */
+    /** @return true if value exists in row. */
     boolean inRow(Character value);
 
     default boolean notInRow(Value value) {
@@ -65,7 +65,7 @@ public interface Position extends Serializable, Comparable<Position> {
         return !inRow(value);
     }
 
-    /** @return true se o valor está na região. */
+    /** @return true if value exists in region. */
     boolean inRegion(Character value);
 
     default boolean notInRegion(Value value) {
@@ -76,27 +76,27 @@ public interface Position extends Serializable, Comparable<Position> {
         return !inRegion(value);
     }
 
-    /** Limpa o valor. */
+    /** Clear the value. */
     void clear();
 
-    /** @return true se está em branco. */
+    /** @return true if blank. */
     boolean isBlank();
 
     default boolean nonBlank() {
         return !isBlank();
     }
 
-    /** Verifica se o símbolo é válido para a posição. */
+    /** Check if symbol is valid for this position. */
     boolean isValidFor(Character symbol);
 
     default boolean isValidFor(Value value) {
         return isValidFor(value.getSymbol());
     }
 
-    /** @return true se está visível. */
+    /** @return true if visible. */
     boolean isVisible();
 
-    /** Define visibilidade. */
+    /** Set visibility. */
     void setVisible(boolean visible);
 
     default boolean isInvalidFor(Character value) {
@@ -111,7 +111,7 @@ public interface Position extends Serializable, Comparable<Position> {
         return !isVisible();
     }
 
-    /** Compara coordenadas com números informados. */
+    /** Compare coordinates with given numbers. */
     boolean equals(byte regionNumber, byte rowNumber, byte columnNumber);
 
     default boolean equals(Character value) {

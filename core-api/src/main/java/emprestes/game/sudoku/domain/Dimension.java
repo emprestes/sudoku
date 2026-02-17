@@ -4,7 +4,7 @@ import static emprestes.game.sudoku.domain.SymbolValues.V16;
 import static emprestes.game.sudoku.domain.SymbolValues.V9;
 
 /**
- * Dimensões suportadas do Sudoku (ex.: 3x3 = 9x9, 4x4 = 16x16).
+ * Supported Sudoku dimensions (e.g., 3x3 = 9x9, 4x4 = 16x16).
  *
  * @author Dude
  * @since 02/2026
@@ -26,14 +26,17 @@ public enum Dimension {
         this.symbols = symbols;
     }
 
+    /** @return first index (1). */
     public Byte from() {
         return 1;
     }
 
+    /** @return last index for this dimension. */
     public Byte to() {
         return side;
     }
 
+    /** Next starting column for a region. */
     public Byte nextFromColumn(Byte column, Byte regionNumber) {
         if (symbols.size.equals(column)) {
             return ONE;
@@ -42,6 +45,7 @@ public enum Dimension {
         return (byte) (ONE + ((regionNumber % side) * side));
     }
 
+    /** Next starting row for a region. */
     public Byte nextFromRow(Byte row, Byte regionNumber) {
         if ((regionNumber % side) == ZERO) {
             return (byte) (regionNumber + (row % side));
@@ -50,6 +54,7 @@ public enum Dimension {
         return row;
     }
 
+    /** Next coordinate inside a region. */
     public Byte nextTo(Byte value) {
         return (byte) (value + side - 1);
     }

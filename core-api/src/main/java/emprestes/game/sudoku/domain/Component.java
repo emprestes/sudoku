@@ -5,34 +5,34 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * Interface base para componentes do tabuleiro (regiões, linhas, colunas).
+ * Base interface for board components (regions, rows, columns).
  *
  * @author Dude
  * @since 02/2026
  */
 public interface Component extends Serializable {
 
-    /** Limpa os valores contidos. */
+    /** Clear contained values. */
     void clear();
 
-    /** @return true se o identificador corresponde ao componente. */
+    /** @return true if the identifier matches this component. */
     boolean equals(byte number);
 
-    /** @return true se todas as posições do componente estão preenchidas. */
+    /** @return true if all positions are filled. */
     boolean isCompleted();
 
-    /** Executa ação sobre cada posição do componente. */
+    /** Apply an action to each position. */
     void forEach(Consumer<Position> action);
 
-    /** Obtém uma posição pelas coordenadas de linha/coluna. */
+    /** Get a position by row/column coordinates. */
     Optional<Position> getBy(byte rowNumber, byte columnNumber);
 
-    /** @return quantidade de colunas. */
+    /** @return number of columns. */
     int getSizeColumns();
 
-    /** @return quantidade de posições. */
+    /** @return number of positions. */
     int getSizePositions();
 
-    /** @return quantidade de linhas. */
+    /** @return number of rows. */
     int getSizeRows();
 }

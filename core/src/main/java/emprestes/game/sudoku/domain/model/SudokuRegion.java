@@ -21,7 +21,7 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Implementação concreta de Region.
+ * Concrete Region implementation.
  *
  * @author Dude
  * @since 02/2026
