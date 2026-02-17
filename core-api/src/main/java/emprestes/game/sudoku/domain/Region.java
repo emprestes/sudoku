@@ -8,30 +8,46 @@ import java.util.stream.Stream;
 
 import static java.util.Set.of;
 
+/**
+ * Região (subgrade) do Sudoku, contendo linhas, colunas e posições.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 public interface Region extends Serializable, Comparable<Region> {
 
+    /** @return identificador da região (1-based). */
     Byte getNumber();
 
+    /** @return lado da subgrade (ex.: 3 para 3x3). */
     Byte getSide();
 
+    /** @return true se o número informado é o da região. */
     boolean equals(byte number);
 
     default boolean equals(Byte number) {
         return equals(number.byteValue());
     }
 
+    /** Limpa posições. */
     void clear();
 
+    /** Inicializa com um valor. */
     void init(Character value);
 
+    /** Executa ação em cada posição. */
     void init(Consumer<Position> action);
 
+    /** @return true se contém o valor. */
     boolean contains(Character value);
 
+    /** @return true se todas posições estão preenchidas. */
     boolean isCompleted();
 
+    /** Cria posição para linha/coluna fornecidas. */
     void createPositionFor(Row row, Column column);
 
+    /** Obtém posição pelas coordenadas. */
     Optional<Position> getBy(byte rowNumber, byte columnNumber);
 
     Column add(Column column);
@@ -80,11 +96,13 @@ public interface Region extends Serializable, Comparable<Region> {
 
     byte nextTo(byte value);
 
+    /** @return valores não vazios da região. */
     Character[] toArrayValues();
 
     default Set<Character> getAllValues() {
         return of(toArrayValues());
     }
 
+    /** Cria a próxima região encadeada na dimensão fornecida. */
     Region next(byte regionNumber, Dimension dimension);
 }

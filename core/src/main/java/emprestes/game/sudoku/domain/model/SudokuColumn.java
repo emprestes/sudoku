@@ -10,6 +10,12 @@ import java.util.List;
 
 import static java.util.Objects.hash;
 
+/**
+ * Implementação concreta de Column.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 final class SudokuColumn implements Column {
 
     @Serial

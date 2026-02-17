@@ -5,6 +5,12 @@ import java.util.Objects;
 import static java.lang.Integer.*;
 import static java.util.Arrays.stream;
 
+/**
+ * Valor com símbolo e peso para ordenação.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 public final class Value implements Comparable<Value> {
 
     private final int ascii;

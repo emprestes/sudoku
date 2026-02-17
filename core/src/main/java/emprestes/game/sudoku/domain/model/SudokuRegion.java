@@ -20,6 +20,12 @@ import static java.util.Collections.shuffle;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Implementação concreta de Region.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 final class SudokuRegion implements Region {
 
     @Serial

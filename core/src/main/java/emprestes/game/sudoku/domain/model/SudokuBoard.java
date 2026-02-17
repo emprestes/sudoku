@@ -22,6 +22,12 @@ import java.util.stream.Stream;
 import static emprestes.game.sudoku.domain.Dimension.D3X3;
 import static java.util.Optional.ofNullable;
 
+/**
+ * Implementação concreta de Board com preenchimento inicial via backtracking.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 public final class SudokuBoard implements Board {
 
     @Serial
@@ -54,11 +60,13 @@ public final class SudokuBoard implements Board {
         return regionList.stream();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Byte getSide() {
         return dimension.side;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void init(Consumer<Region> action) {
         ofNullable(action).ifPresent(_action -> {
@@ -121,6 +129,7 @@ public final class SudokuBoard implements Board {
                 .findFirst();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void start() {
         clear();
@@ -163,6 +172,7 @@ public final class SudokuBoard implements Board {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void play(Character value, byte regionNumber, byte rowNumber, byte columnNumber) throws PositionException {
         final Position position = regionList.stream()
@@ -177,6 +187,7 @@ public final class SudokuBoard implements Board {
         play(value, position);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void play(Character value, Position position) throws WrongPositionException {
         position.play(value);
