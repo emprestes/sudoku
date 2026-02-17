@@ -7,12 +7,12 @@ package emprestes.game.sudoku.domain;
  * @since 02/2026
  */
 public enum SudokuLevel {
-    EASY(0.90),
-    MEDIUM(0.70),
-    HARD(0.60),
-    EXPERT(0.50),
-    MASTER(0.40),
-    EXTREME(0.30);
+    EASY(0.65),
+    MEDIUM(0.50),
+    HARD(0.40),
+    EXPERT(0.35),
+    MASTER(0.30),
+    EXTREME(0.25);
 
     private final double visibilityRatio;
 

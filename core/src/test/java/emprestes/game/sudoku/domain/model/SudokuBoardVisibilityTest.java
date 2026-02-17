@@ -16,12 +16,12 @@ public class SudokuBoardVisibilityTest {
         SudokuBoard board = new SudokuBoard(Dimension.D3X3);
         int total = 81;
         Map<SudokuLevel, Double> ratios = Map.of(
-                SudokuLevel.EASY, 0.90,
-                SudokuLevel.MEDIUM, 0.70,
-                SudokuLevel.HARD, 0.60,
-                SudokuLevel.EXPERT, 0.50,
-                SudokuLevel.MASTER, 0.40,
-                SudokuLevel.EXTREME, 0.30
+                SudokuLevel.EASY, 0.65,
+                SudokuLevel.MEDIUM, 0.50,
+                SudokuLevel.HARD, 0.40,
+                SudokuLevel.EXPERT, 0.35,
+                SudokuLevel.MASTER, 0.30,
+                SudokuLevel.EXTREME, 0.25
         );
 
         ratios.forEach((level, ratio) -> {
