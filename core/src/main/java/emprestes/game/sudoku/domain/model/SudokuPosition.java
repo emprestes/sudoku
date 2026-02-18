@@ -6,6 +6,7 @@ import emprestes.game.sudoku.domain.Region;
 import emprestes.game.sudoku.domain.Row;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,8 +14,15 @@ import java.util.Objects;
 import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
 import static java.lang.String.format;
 
+/**
+ * Concrete Position implementation.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 final class SudokuPosition implements Position {
 
+    @Serial
     private static final long serialVersionUID = 1463509382546272675L;
 
     private final Region region;

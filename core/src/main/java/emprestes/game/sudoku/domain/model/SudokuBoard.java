@@ -43,7 +43,7 @@ public final class SudokuBoard implements Board {
         super();
 
         this.dimension = dimension;
-        this.symbols = dimension.possibleSymbolValues;
+        this.symbols = dimension.symbols;
         this.regionList = new ArrayList<>(dimension.size);
 
         init();

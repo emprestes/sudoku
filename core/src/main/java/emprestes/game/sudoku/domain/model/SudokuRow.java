@@ -4,13 +4,21 @@ import emprestes.game.sudoku.domain.Position;
 import emprestes.game.sudoku.domain.Row;
 import emprestes.game.sudoku.domain.SymbolValues;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * Concrete Row implementation.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 final class SudokuRow implements Row {
 
+    @Serial
     private static final long serialVersionUID = 1961360384243495838L;
 
     private final byte number;

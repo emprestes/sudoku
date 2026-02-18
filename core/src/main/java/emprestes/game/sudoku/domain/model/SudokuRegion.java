@@ -7,6 +7,7 @@ import emprestes.game.sudoku.domain.Region;
 import emprestes.game.sudoku.domain.Row;
 import emprestes.game.sudoku.domain.SymbolValues;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,10 +16,19 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static emprestes.game.sudoku.domain.Dimension.D3X3;
+import static java.util.Collections.shuffle;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
+/**
+ * Concrete Region implementation.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 final class SudokuRegion implements Region {
 
+    @Serial
     private static final long serialVersionUID = 527395914171821865L;
 
     private final byte number;
@@ -26,6 +36,8 @@ final class SudokuRegion implements Region {
     private final List<Position> positions;
     private final List<Column> columns;
     private final List<Row> rows;
+
+    private SudokuRegion next;
 
     SudokuRegion(Byte number) {
         this(number, D3X3);
@@ -39,6 +51,11 @@ final class SudokuRegion implements Region {
         this.positions = new ArrayList<>(dimension.side);
         this.columns = new ArrayList<>(dimension.size);
         this.rows = new ArrayList<>(dimension.size);
+    }
+
+    @Override
+    public Region next(byte regionNumber, Dimension dimension) {
+        return next = new SudokuRegion(regionNumber, dimension);
     }
 
     @Override
@@ -131,10 +148,40 @@ final class SudokuRegion implements Region {
 
     @Override
     public void init(Character value) {
-         positions.stream()
-                 .filter(position -> isBlank(position, value))
-                 .findAny()
-                 .ifPresent(position -> position.setValue(value));
+        var board = positions.stream()
+                .filter(position -> isBlank(position, value))
+                .filter(position -> ofNullable(next)
+                        .filter(n -> n.hasAvailability(position, value))
+                        .map(n -> hasAvailability(position, value, false))
+                        .orElse(true))
+                .collect(toList());
+
+        if (number < 6) {
+            shuffle(board);
+        }
+
+        board.stream()
+                .findFirst()
+                .ifPresent(position -> position.setValue(value));
+    }
+
+    private Boolean hasAvailability(Position current, Character value) {
+        return hasAvailability(current, value, true);
+    }
+
+    private Boolean hasAvailability(Position current, Character value, Boolean isNext) {
+        if (isNext) {
+            current.setValue(value);
+        }
+
+        final Boolean availability = positions.stream()
+                .anyMatch(position -> isBlank(position, value));
+
+        if (isNext) {
+            current.clear();
+        }
+
+        return availability;
     }
 
     private Column newColumn(byte number) {
