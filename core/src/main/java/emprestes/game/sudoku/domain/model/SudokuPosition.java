@@ -14,6 +14,12 @@ import java.util.Objects;
 import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
 import static java.lang.String.format;
 
+/**
+ * Concrete Position implementation.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 final class SudokuPosition implements Position {
 
     @Serial

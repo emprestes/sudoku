@@ -9,6 +9,33 @@ import java.util.stream.Stream;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+/**
+<<<<<<< HEAD
+ * Supported symbol sets for Sudoku (9 or 16 values) and generation helpers.
+ *
+ * @author Dude
+ * @since 02/2026
+=======
+ * Enum que define os conjuntos de símbolos permitidos para o Sudoku
+ * (9x9 e 4x4 estendido para 16 símbolos), além de utilitários
+ * de embaralhamento e geração de valores não utilizados.
+>>>>>>> b227859 (#16 fix: use backtracking init with shuffled symbols)
+ */
+/**
+ * Conjunto de símbolos permitidos por dimensão (ex.: 1-9 ou 1-9 + A-G).
+ */
+=======
+>>>>>>> cf1bd70 (#21 chore: remove javadocs and printlns from tests)
+=======
+/**
+ * Supported symbol sets for Sudoku (9 or 16 values) and generation helpers.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
+>>>>>>> b453373 (#22 docs: add full javadocs with author/since)
 public enum SymbolValues {
     V9(49, 50, 51, 52, 53, 54, 55, 56, 57),
     V16(49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71);
@@ -23,6 +50,35 @@ public enum SymbolValues {
         this.size = (byte) ascii.length;
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /** Shuffle the symbols and return a stream of characters. */
+    public Stream<Character> shuffle() {
+        final List<Value> available = stream(ascii).collect(toList());
+        Collections.shuffle(available);
+        return available.stream().map(Value::getSymbol);
+    }
+
+    /** Iterate all symbols in this dimension. */
+    public void forEach(Consumer<Character> action) {
+        stream(ascii).map(Value::getSymbol).forEach(action);
+    }
+
+    /** Generate a symbol that is not in the provided list. */
+=======
+    /**
+     * Retorna um fluxo embaralhado dos símbolos desta dimensão.
+     */
+=======
+>>>>>>> cf1bd70 (#21 chore: remove javadocs and printlns from tests)
+=======
+    /** Embaralha os símbolos e retorna fluxo de caracteres. */
+>>>>>>> b453373 (#22 docs: add full javadocs with author/since)
+=======
+    /** Shuffle the symbols and return a stream of characters. */
+>>>>>>> ffa3885 (#22 docs: translate javadocs to English)
     public Stream<Character> shuffle() {
         final List<Integer> available = stream(ascii).collect(toList());
         Collections.shuffle(available);
@@ -30,12 +86,28 @@ public enum SymbolValues {
                 .map(code -> (char) code.intValue());
     }
 
+    /** Iterate all symbols in this dimension. */
     public void forEach(Consumer<Character> action) {
         stream(ascii)
                 .map(code -> (char) code.intValue())
                 .forEach(action);
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /**
+     * Gera um símbolo que não está presente na lista informada.
+     */
+>>>>>>> b227859 (#16 fix: use backtracking init with shuffled symbols)
+=======
+>>>>>>> cf1bd70 (#21 chore: remove javadocs and printlns from tests)
+=======
+    /** Gera símbolo que não esteja nos valores informados. */
+>>>>>>> b453373 (#22 docs: add full javadocs with author/since)
+=======
+    /** Generate a symbol that is not in the provided list. */
+>>>>>>> ffa3885 (#22 docs: translate javadocs to English)
     public Character generateNotIn(Character... values) {
         return generateNotIn(stream(values)
                 .filter(Objects::nonNull)
@@ -45,11 +117,18 @@ public enum SymbolValues {
 
     private Character generateNotIn(Integer... values) {
         final Character[] possibleSymbols = stream(ascii)
+<<<<<<< HEAD
+                .map(Value::getSymbol)
+                .filter(code -> stream(values).noneMatch(value -> value.equals((int) code)))
+                .toArray(Character[]::new);
+        final int index = (int) (Math.random() * possibleSymbols.length);
+=======
                 .filter(code -> stream(values).noneMatch(value -> value.equals(code)))
                 .map(code -> (char) code.intValue())
                 .toArray(Character[]::new);
         final int index = (int) (Math.random() * possibleSymbols.length);
 
+>>>>>>> b227859 (#16 fix: use backtracking init with shuffled symbols)
         return possibleSymbols[index];
     }
 }

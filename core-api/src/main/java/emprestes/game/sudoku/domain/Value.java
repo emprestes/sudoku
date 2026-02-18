@@ -2,31 +2,38 @@ package emprestes.game.sudoku.domain;
 
 import java.util.Objects;
 
-import static java.lang.Integer.*;
+import static java.lang.Integer.compare;
 import static java.util.Arrays.stream;
 
+/**
+ * Value with symbol and weight for ordering purposes.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 public final class Value implements Comparable<Value> {
 
     private final int ascii;
     private int weight;
 
     private Value(int ascii) {
-        super();
-
         this.ascii = ascii;
         this.weight = 0;
     }
 
+    /** Build an array of Value from integer codes. */
     static Value[] arrayOf(Integer... values) {
         return stream(values)
                 .map(Value::new)
                 .toArray(Value[]::new);
     }
 
+    /** @return the character symbol. */
     public Character getSymbol() {
         return (char) ascii;
     }
 
+    /** Increase weight (used for ordering). */
     public Value increaseWeight() {
         weight++;
         return this;

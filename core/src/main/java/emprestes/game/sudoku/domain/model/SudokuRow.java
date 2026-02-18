@@ -10,6 +10,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * Concrete Row implementation.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 final class SudokuRow implements Row {
 
     @Serial

@@ -8,30 +8,46 @@ import java.util.stream.Stream;
 
 import static java.util.Set.of;
 
+/**
+ * Sudoku region (sub-grid) containing rows, columns, and positions.
+ *
+ * @author Dude
+ * @since 02/2026
+ */
 public interface Region extends Serializable, Comparable<Region> {
 
+    /** @return region identifier (1-based). */
     Byte getNumber();
 
+    /** @return side length of the sub-grid (e.g., 3 for 3x3). */
     Byte getSide();
 
+    /** @return true if the given number matches this region. */
     boolean equals(byte number);
 
     default boolean equals(Byte number) {
         return equals(number.byteValue());
     }
 
+    /** Clear positions. */
     void clear();
 
+    /** Initialize with a value. */
     void init(Character value);
 
+    /** Execute an action on each position. */
     void init(Consumer<Position> action);
 
+    /** @return true if contains the value. */
     boolean contains(Character value);
 
+    /** @return true if all positions are filled. */
     boolean isCompleted();
 
+    /** Create a position for the given row/column. */
     void createPositionFor(Row row, Column column);
 
+    /** Get a position by coordinates. */
     Optional<Position> getBy(byte rowNumber, byte columnNumber);
 
     Column add(Column column);
@@ -80,11 +96,13 @@ public interface Region extends Serializable, Comparable<Region> {
 
     byte nextTo(byte value);
 
+    /** @return non-blank values in the region. */
     Character[] toArrayValues();
 
     default Set<Character> getAllValues() {
         return of(toArrayValues());
     }
 
+    /** Create the next chained region in the given dimension. */
     Region next(byte regionNumber, Dimension dimension);
 }
