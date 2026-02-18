@@ -7,39 +7,39 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 
 /**
- * Contrato de um tabuleiro de Sudoku, permitindo inicialização, jogadas e visibilidade.
+ * Sudoku board contract, including initialization, moves, and visibility settings.
  *
  * @author Dude
  * @since 02/2026
  */
 public interface Board extends Serializable {
 
-    /** @return lado do tabuleiro. */
+    /** @return board side length. */
     Byte getSide();
 
-    /** Inicializa estrutura de regiões/linhas/colunas aplicando a ação informada. */
+    /** Initialize regions/rows/columns applying the provided action. */
     void init(Consumer<Region> action);
 
-    /** Limpa e preenche o tabuleiro com valores válidos. */
+    /** Clear and fill the board with valid values. */
     void start();
 
-    /** Realiza jogada informando valor e coordenadas (região, linha, coluna). */
+    /** Make a move with value and coordinates (region, row, column). */
     void play(Character value, byte regionNumber, byte rowNumber, byte columnNumber) throws PositionException;
 
-    /** Realiza jogada em uma posição já obtida. */
+    /** Make a move on a previously retrieved position. */
     void play(Character value, Position position) throws WrongPositionException;
 
-    /** Indica se todas as posições estão preenchidas corretamente. */
+    /** @return true when all positions are correctly filled. */
     boolean isGameOver();
 
-    /** @return true se o jogo ainda não terminou. */
+    /** @return true if the game has not finished yet. */
     default boolean isNotGameOver() {
         return !isGameOver();
     }
 
-    /** Define o nível de visibilidade do tabuleiro. */
+    /** Set board visibility level. */
     void setLevel(SudokuLevel level);
 
-    /** @return nível atual de visibilidade. */
+    /** @return current board visibility level. */
     SudokuLevel getLevel();
 }

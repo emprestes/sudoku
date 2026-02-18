@@ -1,7 +1,7 @@
 package emprestes.game.sudoku.domain;
 
 /**
- * Níveis de visibilidade do Sudoku.
+ * Sudoku visibility levels.
  *
  * @author Dude
  * @since 02/2026
