@@ -25,10 +25,10 @@
 
  <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  <maven.compiler.source>14</maven.compiler.source>
-  <maven.compiler.target>14</maven.compiler.target>
+  <maven.compiler.source>24</maven.compiler.source>
+  <maven.compiler.target>24</maven.compiler.target>
   <maven.compiler.vendor>openJDK</maven.compiler.vendor>
-  <maven.compiler.release>14</maven.compiler.release>
+  <maven.compiler.release>24</maven.compiler.release>
   <junit.version>5.6.0</junit.version>
  </properties>
 
