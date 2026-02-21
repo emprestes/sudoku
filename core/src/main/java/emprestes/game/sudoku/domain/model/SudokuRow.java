@@ -33,11 +33,6 @@ final class SudokuRow implements Row {
     }
 
     @Override
-    public boolean isBlank() {
-        return positions.stream().allMatch(Position::isBlank);
-    }
-
-    @Override
     public Byte getNumber() {
         return number;
     }
@@ -53,6 +48,11 @@ final class SudokuRow implements Row {
     @Override
     public void add(Position position) {
         positions.add(position);
+    }
+
+    @Override
+    public List<Position> positionList() {
+        return positions;
     }
 
     @Override
@@ -91,8 +91,7 @@ final class SudokuRow implements Row {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SudokuRow)) return false;
-        SudokuRow sudokuRow = (SudokuRow) o;
+        if (!(o instanceof SudokuRow sudokuRow)) return false;
         return equals(sudokuRow.number);
     }
 

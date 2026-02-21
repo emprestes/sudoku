@@ -1,6 +1,7 @@
 package emprestes.game.sudoku.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -13,9 +14,6 @@ import static java.util.Set.of;
  * @since 02/2026
  */
 public interface Row extends Serializable, Comparable<Row> {
-
-    /** @return true if all positions are blank. */
-    boolean isBlank();
 
     /** @return row number (1-based). */
     Byte getNumber();
@@ -49,4 +47,6 @@ public interface Row extends Serializable, Comparable<Row> {
     default boolean equals(Byte number) {
         return equals(number.byteValue());
     }
+
+    List<Position> positionList();
 }

@@ -1,28 +1,34 @@
     package emprestes.game.sudoku.domain.model;
 
-import emprestes.game.sudoku.domain.Board;
-import emprestes.game.sudoku.domain.Column;
-import emprestes.game.sudoku.domain.Dimension;
-import emprestes.game.sudoku.domain.Position;
-import emprestes.game.sudoku.domain.Region;
-import emprestes.game.sudoku.domain.Row;
-import emprestes.game.sudoku.domain.SymbolValues;
-import emprestes.game.sudoku.domain.exception.PositionException;
-import emprestes.game.sudoku.domain.exception.PositionNotFoundException;
-import emprestes.game.sudoku.domain.exception.WrongPositionException;
+    import emprestes.game.sudoku.domain.Board;
+    import emprestes.game.sudoku.domain.Column;
+    import emprestes.game.sudoku.domain.Dimension;
+    import emprestes.game.sudoku.domain.Position;
+    import emprestes.game.sudoku.domain.Region;
+    import emprestes.game.sudoku.domain.Row;
+    import emprestes.game.sudoku.domain.SymbolValues;
+    import emprestes.game.sudoku.domain.exception.PositionException;
+    import emprestes.game.sudoku.domain.exception.PositionNotFoundException;
+    import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
+    import java.io.Serial;
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.Objects;
+    import java.util.Optional;
+    import java.util.Set;
+    import java.util.TreeSet;
+    import java.util.function.Consumer;
 
-import static emprestes.game.sudoku.domain.Dimension.D3X3;
-import static java.util.Optional.ofNullable;
+    import static emprestes.game.sudoku.domain.Dimension.D3X3;
+    import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
+    import static emprestes.game.sudoku.domain.SymbolValues.BREAK;
+    import static java.lang.Math.max;
+    import static java.util.Objects.hash;
+    import static java.util.Objects.isNull;
+    import static java.util.Optional.ofNullable;
 
-/**
+    /**
  * Concrete Board implementation with initial fill using backtracking.
  *
  * @author Dude
@@ -37,6 +43,8 @@ public final class SudokuBoard implements Board {
     private final SymbolValues symbols;
     private final List<Region> regionList;
 
+    private final List<Position> positionList = new ArrayList<>();
+    private final Set<Row> rowList = new TreeSet<>();
 
     public SudokuBoard() {
         this(D3X3);
@@ -54,10 +62,6 @@ public final class SudokuBoard implements Board {
 
     private void init() {
         init(regionList::add);
-    }
-
-    private Stream<Region> getRegionList() {
-        return regionList.stream();
     }
 
     /** {@inheritDoc} */
@@ -100,7 +104,8 @@ public final class SudokuBoard implements Board {
                                 .filter(region::nonExistsColumn)
                                 .map(region::add)
                                 .orElseGet(() -> finalRegion.getColumnOr(actualColumnIndex, actualColumn));
-                        region.createPositionFor(row, column);
+                        positionList.add(region.createPositionFor(row, column));
+                        rowList.add(row);
                     }
                 }
 
@@ -141,29 +146,28 @@ public final class SudokuBoard implements Board {
     }
 
     private void initValues() {
-        final List<Position> positions = new ArrayList<>();
-        getRegionList()
-                .flatMap(Region::getRows)
-                .forEach(row -> row.forEach(positions::add));
-
-        fillValuesBacktracking(positions, 0);
+        drawValuesTo(positionList);
     }
 
-    private boolean fillValuesBacktracking(List<Position> positions, int index) {
+    private void drawValuesTo(List<Position> positions) {
+        drawWithBacktracking(positions, 0);
+    }
+
+    private boolean drawWithBacktracking(List<Position> positions, int index) {
         if (index >= positions.size()) {
             return true;
         }
 
-        final Position position = positions.get(index);
-        position.clear();
+        var position = positions.get(index);
 
-        final List<Character> candidates = symbols.shuffle().toList();
+        var candidates = symbols.shuffle(position.usedSymbols());
         for (Character symbol : candidates) {
             if (position.isInvalidFor(symbol)) {
                 continue;
             }
+
             position.setValue(symbol);
-            if (fillValuesBacktracking(positions, index + 1)) {
+            if (drawWithBacktracking(positions, ++index)) {
                 return true;
             }
             position.clear();
@@ -233,78 +237,58 @@ public final class SudokuBoard implements Board {
 
     @Override
     public int hashCode() {
-        return Objects.hash(dimension, regionList);
+        return hash(dimension, regionList);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        int boxSize = dimension.side;
+        var sb = new StringBuilder();
+        var horizontalLine = createHorizontalLine(dimension.side);
+        var rowCounter = 1;
 
-        // Criar a linha horizontal
-            String horizontalLine = createHorizontalLine(boxSize);
+        sb.append(horizontalLine);
 
-            // Organizar as regiões por linhas
-            for (int rowGroup = 0; rowGroup < boxSize; rowGroup++) {
-                // Adicionar linha horizontal no início de cada grupo de linhas
-                sb.append(horizontalLine).append("\n");
+        for (var row : rowList) {
+            Position previousPosition = null;
 
-                // Para cada linha dentro do grupo
-                for (int rowInGroup = 0; rowInGroup < boxSize; rowInGroup++) {
-                    byte rowNumber = (byte) (rowGroup * boxSize + rowInGroup + 1);
+            sb.append('|');
 
-                    // Para cada grupo de colunas
-                    for (int colGroup = 0; colGroup < boxSize; colGroup++) {
-                        // Adicionar separador vertical no início de cada grupo
-                        sb.append("| ");
-
-                        // Para cada coluna dentro do grupo
-                        for (int colInGroup = 0; colInGroup < boxSize; colInGroup++) {
-                            byte colNumber = (byte) (colGroup * boxSize + colInGroup + 1);
-
-                            // Calcular o número da região
-                            byte regionNumber = (byte) (rowGroup * boxSize + colGroup + 1);
-
-                            // Obter o valor da posição usando coordenadas absolutas
-                            Character value = ' ';
-                            try {
-                                Optional<Region> region = regionList.stream()
-                                        .filter(r -> r.equals(regionNumber))
-                                        .findFirst();
-
-                                if (region.isPresent()) {
-                                    Optional<Position> position = region.get().getBy(rowNumber, colNumber);
-                                    if (position.isPresent()) {
-                                        value = position.get().getValue();
-                                        if (value == null || value == '0') {
-                                            value = ' ';
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                                value = ' ';
-                            }
-
-                            sb.append(value).append(" ");
-                        }
-                    }
-                    // Fechar a linha com separador vertical
-                    sb.append("|\n");
+            for (var position : row.positionList()) {
+                if (isNull(previousPosition)) {
+                    previousPosition = position;
                 }
-            }
-            // Adicionar linha horizontal no final
-            sb.append(horizontalLine);
 
-            return sb.toString();
+                if (position.hasChangedRegion(previousPosition)) {
+                    sb.append(BLANK).append('|');
+                }
+
+                sb.append(BLANK).append(position.getValue());
+
+                previousPosition = position;
+            }
+
+            sb.append(BLANK).append('|');
+
+            if (rowCounter++ % dimension.side == 0) {
+                sb.append(horizontalLine);
+            } else {
+                sb.append(BREAK);
+            }
+        }
+
+        return sb.toString();
     }
 
     private String createHorizontalLine(int boxSize) {
-        StringBuilder line = new StringBuilder();
+        var line = new StringBuilder().append(BREAK);
+
         for (int i = 0; i < boxSize; i++) {
             line.append("+");
-            line.append("-".repeat(Math.max(0, boxSize * 2 + 1)));
+            line.repeat("-", max(0, boxSize * 2 + 1));
         }
-            line.append("+");
+
+        line.append("+").append(BREAK);
+
         return line.toString();
     }
 }

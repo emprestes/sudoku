@@ -12,13 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import static emprestes.game.sudoku.domain.Dimension.D3X3;
-import static java.util.Collections.shuffle;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Concrete Region implementation.
@@ -37,8 +33,6 @@ final class SudokuRegion implements Region {
     private final List<Column> columns;
     private final List<Row> rows;
 
-    private SudokuRegion next;
-
     SudokuRegion(Byte number) {
         this(number, D3X3);
     }
@@ -55,22 +49,12 @@ final class SudokuRegion implements Region {
 
     @Override
     public Region next(byte regionNumber, Dimension dimension) {
-        return next = new SudokuRegion(regionNumber, dimension);
+        return new SudokuRegion(regionNumber, dimension);
     }
 
     @Override
     public Byte getNumber() {
         return number;
-    }
-
-    @Override
-    public Byte getSide() {
-        return dimension.side;
-    }
-
-    @Override
-    public void init(Consumer<Position> action) {
-        positions.forEach(action);
     }
 
     @Override
@@ -80,13 +64,6 @@ final class SudokuRegion implements Region {
         boolean isCompletedColumn = columns.stream().allMatch(Column::isCompleted);
 
         return isCompleted && isCompletedRow && isCompletedColumn;
-    }
-
-    private boolean isBlank(Position position, Character value) {
-        return position.isBlank()
-                && position.notInRegion(value)
-                && position.notInRow(value)
-                && position.notInColumn(value);
     }
 
     @Override
@@ -146,44 +123,6 @@ final class SudokuRegion implements Region {
         positions.forEach(Position::clear);
     }
 
-    @Override
-    public void init(Character value) {
-        var board = positions.stream()
-                .filter(position -> isBlank(position, value))
-                .filter(position -> ofNullable(next)
-                        .filter(n -> n.hasAvailability(position, value))
-                        .map(n -> hasAvailability(position, value, false))
-                        .orElse(true))
-                .collect(toList());
-
-        if (number < 6) {
-            shuffle(board);
-        }
-
-        board.stream()
-                .findFirst()
-                .ifPresent(position -> position.setValue(value));
-    }
-
-    private Boolean hasAvailability(Position current, Character value) {
-        return hasAvailability(current, value, true);
-    }
-
-    private Boolean hasAvailability(Position current, Character value, Boolean isNext) {
-        if (isNext) {
-            current.setValue(value);
-        }
-
-        final Boolean availability = positions.stream()
-                .anyMatch(position -> isBlank(position, value));
-
-        if (isNext) {
-            current.clear();
-        }
-
-        return availability;
-    }
-
     private Column newColumn(byte number) {
         return add(new SudokuColumn(number));
     }
@@ -204,11 +143,6 @@ final class SudokuRegion implements Region {
     @Override
     public boolean existsRow(byte number) {
         return getRow(number).isPresent();
-    }
-
-    @Override
-    public Stream<Row> getRows() {
-        return rows.stream();
     }
 
     @Override
@@ -248,12 +182,14 @@ final class SudokuRegion implements Region {
     }
 
     @Override
-    public void createPositionFor(Row row, Column column) {
+    public Position createPositionFor(Row row, Column column) {
         final Position position = new SudokuPosition(this, row, column);
 
         positions.add(position);
         column.add(position);
         row.add(position);
+
+        return position;
     }
 
     @Override
@@ -288,10 +224,14 @@ final class SudokuRegion implements Region {
     }
 
     @Override
+    public boolean nonEquals(Object o) {
+        return !equals(o);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SudokuRegion)) return false;
-        SudokuRegion that = (SudokuRegion) o;
+        if (!(o instanceof SudokuRegion that)) return false;
         return equals(that.number) &&
                 dimension == that.dimension;
     }

@@ -15,6 +15,7 @@ public class SudokuBoardTest {
         board = new SudokuBoard(Dimension.D3X3);
 
         board.start();
+        System.out.println(board);
 
         assertEquals(81, board.getSizePositions());
         assertEquals(9, board.getSizeRegions());
@@ -28,6 +29,7 @@ public class SudokuBoardTest {
         board = new SudokuBoard(Dimension.D4X4);
 
         board.start();
+        System.out.println(board);
 
         assertEquals(256, board.getSizePositions());
         assertEquals(16, board.getSizeRegions());
