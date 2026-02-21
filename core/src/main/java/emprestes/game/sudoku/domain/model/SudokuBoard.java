@@ -258,11 +258,17 @@ public final class SudokuBoard implements Board {
                     previousPosition = position;
                 }
 
+                sb.append(BLANK);
+
                 if (position.hasChangedRegion(previousPosition)) {
-                    sb.append(BLANK).append('|');
+                    sb.append('|');
                 }
 
-                sb.append(BLANK).append(position.getValue());
+                if (position.isVisible()) {
+                    sb.append(position.getValue());
+                } else {
+                    sb.append(BLANK);
+                }
 
                 previousPosition = position;
             }
