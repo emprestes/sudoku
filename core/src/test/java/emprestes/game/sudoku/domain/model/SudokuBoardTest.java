@@ -1,7 +1,11 @@
 package emprestes.game.sudoku.domain.model;
 
 import emprestes.game.sudoku.domain.Dimension;
+import emprestes.game.sudoku.domain.Position;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -21,6 +25,7 @@ public class SudokuBoardTest {
         assertEquals(9, board.getSizeRegions());
         assertEquals(9, board.getSizeRows());
         assertEquals(9, board.getSizeColumns());
+        assertAllPositionsFilled(board);
         assertTrue(board.isNotGameOver());
     }
 
@@ -35,6 +40,20 @@ public class SudokuBoardTest {
         assertEquals(16, board.getSizeRegions());
         assertEquals(16, board.getSizeRows());
         assertEquals(16, board.getSizeColumns());
+        assertAllPositionsFilled(board);
         assertTrue(board.isNotGameOver());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertAllPositionsFilled(SudokuBoard board) {
+        try {
+            Field field = SudokuBoard.class.getDeclaredField("positionList");
+            field.setAccessible(true);
+
+            List<Position> positions = (List<Position>) field.get(board);
+            assertTrue(positions.stream().allMatch(Position::nonBlank));
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError("Could not validate generated board values", e);
+        }
     }
 }

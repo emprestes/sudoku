@@ -167,7 +167,7 @@ public final class SudokuBoard implements Board {
             }
 
             position.setValue(symbol);
-            if (drawWithBacktracking(positions, ++index)) {
+            if (drawWithBacktracking(positions, index + 1)) {
                 return true;
             }
             position.clear();
