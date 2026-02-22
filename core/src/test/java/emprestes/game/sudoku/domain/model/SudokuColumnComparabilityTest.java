@@ -1,6 +1,6 @@
 package emprestes.game.sudoku.domain.model;
 
-import emprestes.game.sudoku.domain.Column;
+import emprestes.game.sudoku.domain.IColumn;
 import junitx.extensions.ComparabilityTestCase;
 
 public class SudokuColumnComparabilityTest extends ComparabilityTestCase {
@@ -10,19 +10,19 @@ public class SudokuColumnComparabilityTest extends ComparabilityTestCase {
     }
 
     @Override
-    protected Comparable<Column> createLessInstance() {
+    protected Comparable<IColumn> createLessInstance() {
         final byte number = 1;
         return new SudokuColumn(number);
     }
 
     @Override
-    protected Comparable<Column> createEqualInstance() {
+    protected Comparable<IColumn> createEqualInstance() {
         final byte number = 5;
         return new SudokuColumn(number);
     }
 
     @Override
-    protected Comparable<Column> createGreaterInstance() {
+    protected Comparable<IColumn> createGreaterInstance() {
         final byte number = 9;
         return new SudokuColumn(number);
     }

@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  * @author Dude
  * @since 02/2026
  */
-public interface Component extends Serializable {
+public interface IComponent extends Serializable {
 
     /** Clear contained values. */
     void clear();
@@ -22,10 +22,10 @@ public interface Component extends Serializable {
     boolean isCompleted();
 
     /** Apply an action to each position. */
-    void forEach(Consumer<Position> action);
+    void forEach(Consumer<IPosition> action);
 
     /** Get a position by row/column coordinates. */
-    Optional<Position> getBy(byte rowNumber, byte columnNumber);
+    Optional<IPosition> getBy(byte rowNumber, byte columnNumber);
 
     /** @return number of columns. */
     int getSizeColumns();

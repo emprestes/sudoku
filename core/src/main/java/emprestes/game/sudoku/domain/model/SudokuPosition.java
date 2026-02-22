@@ -1,9 +1,9 @@
 package emprestes.game.sudoku.domain.model;
 
-import emprestes.game.sudoku.domain.Column;
-import emprestes.game.sudoku.domain.Position;
-import emprestes.game.sudoku.domain.Region;
-import emprestes.game.sudoku.domain.Row;
+import emprestes.game.sudoku.domain.IColumn;
+import emprestes.game.sudoku.domain.IPosition;
+import emprestes.game.sudoku.domain.IRegion;
+import emprestes.game.sudoku.domain.IRow;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
 import java.io.Serial;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
+import static emprestes.game.sudoku.domain.GameSymbol.BLANK;
 import static java.lang.String.format;
 
 /**
@@ -20,14 +20,14 @@ import static java.lang.String.format;
  * @author Dude
  * @since 02/2026
  */
-final class SudokuPosition implements Position {
+final class SudokuPosition implements IPosition {
 
     @Serial
     private static final long serialVersionUID = 1463509382546272675L;
 
-    private final Region region;
-    private final Row row;
-    private final Column column;
+    private final IRegion region;
+    private final IRow row;
+    private final IColumn column;
 
     private Character value;
     private boolean valid;
@@ -37,7 +37,7 @@ final class SudokuPosition implements Position {
         this(new SudokuRegion(regionNumber), new SudokuRow(rowNumber), new SudokuColumn(columnNumber));
     }
 
-    SudokuPosition(Region region, Row row, Column column) {
+    SudokuPosition(IRegion region, IRow row, IColumn column) {
         super();
 
         this.region = region;
@@ -49,17 +49,17 @@ final class SudokuPosition implements Position {
     }
 
     @Override
-    public Region getRegion() {
+    public IRegion getRegion() {
         return region;
     }
 
     @Override
-    public Row getRow() {
+    public IRow getRow() {
         return row;
     }
 
     @Override
-    public Column getColumn() {
+    public IColumn getColumn() {
         return column;
     }
 
@@ -129,12 +129,17 @@ final class SudokuPosition implements Position {
     }
 
     @Override
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    @Override
     public boolean isVisible() {
         return visible;
     }
 
     @Override
-    public int compareTo(Position other) {
+    public int compareTo(IPosition other) {
         int comp = getRegion().compareTo(other.getRegion());
 
         if (comp == 0) {

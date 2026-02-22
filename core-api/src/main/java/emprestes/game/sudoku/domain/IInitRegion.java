@@ -7,8 +7,8 @@ package emprestes.game.sudoku.domain;
  * @since 02/2026
  */
 @FunctionalInterface
-public interface InitRegion {
+public interface IInitRegion {
 
     /** Initialize the provided region. */
-    void init(Region region);
+    void init(IRegion region);
 }
