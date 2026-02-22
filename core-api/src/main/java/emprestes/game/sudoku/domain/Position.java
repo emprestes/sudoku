@@ -72,6 +72,9 @@ public interface Position extends Serializable, Comparable<Position> {
     /** Check if symbol is valid for this position. */
     boolean isValidFor(Character symbol);
 
+    /** Set cell visibility. */
+    void setVisible(boolean visible);
+
     /** @return true if visible. */
     boolean isVisible();
 

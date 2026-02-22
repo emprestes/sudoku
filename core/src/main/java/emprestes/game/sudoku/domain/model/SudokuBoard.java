@@ -18,6 +18,7 @@
     import java.util.Optional;
     import java.util.Set;
     import java.util.TreeSet;
+    import java.util.Random;
     import java.util.function.Consumer;
 
     import static emprestes.game.sudoku.domain.Dimension.D3X3;
@@ -42,6 +43,7 @@ public final class SudokuBoard implements Board {
     private final Dimension dimension;
     private final SymbolValues symbols;
     private final List<Region> regionList;
+    private final VisibilityMaskStrategy visibilityMaskStrategy;
 
     private final List<Position> positionList = new ArrayList<>();
     private final Set<Row> rowList = new TreeSet<>();
@@ -51,11 +53,16 @@ public final class SudokuBoard implements Board {
     }
 
     public SudokuBoard(Dimension dimension) {
+        this(dimension, new EasyVisibilityMaskStrategy(new Random()));
+    }
+
+    SudokuBoard(Dimension dimension, VisibilityMaskStrategy visibilityMaskStrategy) {
         super();
 
         this.dimension = dimension;
         this.symbols = dimension.symbols;
         this.regionList = new ArrayList<>(dimension.size);
+        this.visibilityMaskStrategy = visibilityMaskStrategy;
 
         init();
     }
@@ -147,6 +154,7 @@ public final class SudokuBoard implements Board {
 
     private void initValues() {
         drawValuesTo(positionList);
+        visibilityMaskStrategy.apply(positionList);
     }
 
     private void drawValuesTo(List<Position> positions) {

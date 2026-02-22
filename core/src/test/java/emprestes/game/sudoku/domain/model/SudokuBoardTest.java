@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static emprestes.game.sudoku.domain.Dimension.D3X3;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -58,16 +60,51 @@ public class SudokuBoardTest {
         assertTrue(lines.stream().noneMatch(line -> line.matches(".*\\|\\S.*")));
     }
 
-    @SuppressWarnings("unchecked")
+    @Test
+    public void easyLevelShouldStartWithVisiblePositionsInExpectedRange() {
+        board = new SudokuBoard(D3X3);
+
+        board.start();
+
+        int visiblePositions = getPositions(board).stream()
+                .filter(Position::isVisible)
+                .mapToInt(_position -> 1)
+                .sum();
+
+        assertTrue(visiblePositions >= 36);
+        assertTrue(visiblePositions <= 45);
+    }
+
+    @Test
+    public void easyLevelMaskShouldVaryAcrossLoads() {
+        board = new SudokuBoard(D3X3);
+
+        board.start();
+        var firstMask = getPositions(board).stream()
+                .map(Position::isVisible)
+                .toList();
+
+        board.start();
+        var secondMask = getPositions(board).stream()
+                .map(Position::isVisible)
+                .toList();
+
+        assertFalse(firstMask.equals(secondMask));
+    }
+
     private void assertAllPositionsFilled(SudokuBoard board) {
+        assertTrue(getPositions(board).stream().allMatch(Position::nonBlank));
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Position> getPositions(SudokuBoard board) {
         try {
             Field field = SudokuBoard.class.getDeclaredField("positionList");
             field.setAccessible(true);
 
-            List<Position> positions = (List<Position>) field.get(board);
-            assertTrue(positions.stream().allMatch(Position::nonBlank));
+            return (List<Position>) field.get(board);
         } catch (ReflectiveOperationException e) {
-            throw new AssertionError("Could not validate generated board values", e);
+            throw new AssertionError("Could not inspect board positions", e);
         }
     }
 }
