@@ -21,6 +21,8 @@ final class EasyVisibilityMaskStrategy implements VisibilityMaskStrategy, Serial
     @Serial
     private static final long serialVersionUID = -8864012481913597164L;
 
+    private static final float BASE_3X3_POSITIONS = 81.0f;
+
     private final Random random;
 
     EasyVisibilityMaskStrategy(Random random) {
@@ -55,8 +57,11 @@ final class EasyVisibilityMaskStrategy implements VisibilityMaskStrategy, Serial
         return random.nextInt(minVisible, maxVisible + 1);
     }
 
+    /**
+     * Scales EASY clue range from a 9x9 baseline (81 positions) to other board sizes.
+     */
     private int scaledValue(int defaultFor3x3, int size) {
-        int scaled = Math.round((defaultFor3x3 / 81.0f) * size);
+        int scaled = Math.round((defaultFor3x3 / BASE_3X3_POSITIONS) * size);
         return min(size, max(1, scaled));
     }
 
