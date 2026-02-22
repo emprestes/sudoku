@@ -62,18 +62,20 @@ public class SudokuBoardTest {
     }
 
     @Test
-    public void easyLevelShouldStartWithVisiblePositionsInExpectedRange() {
+    public void easyLevelShouldStartWithTwoToSixVisiblePositionsPerRegion() {
         board = new SudokuBoard(D3X3);
 
         board.start();
 
-        int visiblePositions = getPositions(board).stream()
+        var visiblePerRegion = getPositions(board).stream()
                 .filter(IPosition::isVisible)
-                .mapToInt(_position -> 1)
-                .sum();
+                .collect(java.util.stream.Collectors.groupingBy(
+                        position -> position.getRegion().getNumber(),
+                        java.util.stream.Collectors.counting()
+                ));
 
-        assertTrue(visiblePositions >= 36);
-        assertTrue(visiblePositions <= 45);
+        assertEquals(9, visiblePerRegion.size());
+        assertTrue(visiblePerRegion.values().stream().allMatch(count -> count >= 2 && count <= 6));
     }
 
     @Test

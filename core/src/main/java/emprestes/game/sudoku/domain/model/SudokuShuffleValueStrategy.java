@@ -3,11 +3,16 @@ package emprestes.game.sudoku.domain.model;
 import emprestes.game.sudoku.domain.IPosition;
 import emprestes.game.sudoku.domain.IShuffleValueStrategy;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class SudokuShuffleValueStrategy implements IShuffleValueStrategy {
+public class SudokuShuffleValueStrategy implements IShuffleValueStrategy, Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -5450054276194144588L;
 
     @Override
     public void shuffle(List<IPosition> positions, Function<Character[], List<Character>> symbols, Predicate<IPosition> visibility) {

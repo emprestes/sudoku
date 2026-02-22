@@ -166,6 +166,7 @@ public final class SudokuBoard implements IBoard {
     }
 
     private void initValues() {
+        visibility.reset();
         shuffleValueStrategy.shuffle(positionList, symbols::shuffle, visibility::isVisible);
     }
 
