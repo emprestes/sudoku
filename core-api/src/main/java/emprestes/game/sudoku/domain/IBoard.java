@@ -36,4 +36,6 @@ public interface IBoard extends Serializable {
     default boolean isNotGameOver() {
         return !isGameOver();
     }
+
+    void setVisibility(GameVisibility visibility);
 }
