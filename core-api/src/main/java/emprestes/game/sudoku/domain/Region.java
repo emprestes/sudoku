@@ -3,8 +3,6 @@ package emprestes.game.sudoku.domain;
 import java.io.Serializable;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import static java.util.Set.of;
 
@@ -19,9 +17,6 @@ public interface Region extends Serializable, Comparable<Region> {
     /** @return region identifier (1-based). */
     Byte getNumber();
 
-    /** @return side length of the sub-grid (e.g., 3 for 3x3). */
-    Byte getSide();
-
     /** @return true if the given number matches this region. */
     boolean equals(byte number);
 
@@ -29,14 +24,10 @@ public interface Region extends Serializable, Comparable<Region> {
         return equals(number.byteValue());
     }
 
+    boolean nonEquals(Object o);
+
     /** Clear positions. */
     void clear();
-
-    /** Initialize with a value. */
-    void init(Character value);
-
-    /** Execute an action on each position. */
-    void init(Consumer<Position> action);
 
     /** @return true if contains the value. */
     boolean contains(Character value);
@@ -45,7 +36,7 @@ public interface Region extends Serializable, Comparable<Region> {
     boolean isCompleted();
 
     /** Create a position for the given row/column. */
-    void createPositionFor(Row row, Column column);
+    Position createPositionFor(Row row, Column column);
 
     /** Get a position by coordinates. */
     Optional<Position> getBy(byte rowNumber, byte columnNumber);
@@ -73,8 +64,6 @@ public interface Region extends Serializable, Comparable<Region> {
     default boolean nonExistsRow(byte number) {
         return !existsRow(number);
     }
-
-    Stream<Row> getRows();
 
     Row getRowBy(byte number);
 

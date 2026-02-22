@@ -59,18 +59,8 @@ final class SudokuPosition implements Position {
     }
 
     @Override
-    public Byte getRowNumber() {
-        return getRow().getNumber();
-    }
-
-    @Override
     public Column getColumn() {
         return column;
-    }
-
-    @Override
-    public Byte getColumnNumber() {
-        return getColumn().getNumber();
     }
 
     @Override
@@ -79,7 +69,7 @@ final class SudokuPosition implements Position {
     }
 
     @Override
-    public Character[] getAllExistSymbols() {
+    public Character[] usedSymbols() {
         final List<Character> allValues = new ArrayList<>();
 
         allValues.addAll(region.getAllValues());
@@ -144,11 +134,6 @@ final class SudokuPosition implements Position {
     }
 
     @Override
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    @Override
     public int compareTo(Position other) {
         int comp = getRegion().compareTo(other.getRegion());
 
@@ -171,8 +156,7 @@ final class SudokuPosition implements Position {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SudokuPosition)) return false;
-        SudokuPosition that = (SudokuPosition) o;
+        if (!(o instanceof SudokuPosition that)) return false;
         return valid == that.valid &&
                 visible == that.visible &&
                 region.equals(that.region.getNumber()) &&

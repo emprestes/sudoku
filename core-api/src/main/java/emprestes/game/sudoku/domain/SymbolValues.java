@@ -2,9 +2,7 @@ package emprestes.game.sudoku.domain;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -20,6 +18,7 @@ public enum SymbolValues {
     V16(49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71);
 
     public static final Character BLANK = ' ';
+    public static final Character BREAK = '\n';
 
     public final Byte size;
     private final Integer[] ascii;
@@ -30,10 +29,15 @@ public enum SymbolValues {
     }
 
     /** Shuffle the symbols and return a stream of characters. */
-    public Stream<Character> shuffle() {
-        final List<Integer> available = stream(ascii).collect(toList());
+    public List<Character> shuffle(Character... excluded) {
+        var available = stream(ascii)
+                .map(code -> (char) code.intValue())
+                .filter(c -> stream(excluded).noneMatch(c::equals))
+                .collect(toList());
+
         Collections.shuffle(available);
-        return available.stream().map(code -> (char) code.intValue());
+
+        return available;
     }
 
     /** Iterate all symbols in this dimension. */
@@ -41,23 +45,5 @@ public enum SymbolValues {
         stream(ascii)
                 .map(code -> (char) code.intValue())
                 .forEach(action);
-    }
-
-    /** Generate a symbol that is not in the provided list. */
-    public Character generateNotIn(Character... values) {
-        return generateNotIn(stream(values)
-                .filter(Objects::nonNull)
-                .map(value -> (int) value)
-                .toArray(Integer[]::new));
-    }
-
-    private Character generateNotIn(Integer... values) {
-        final Character[] possibleSymbols = stream(ascii)
-                .filter(code -> stream(values).noneMatch(value -> value.equals(code)))
-                .map(code -> (char) code.intValue())
-                .toArray(Character[]::new);
-
-        final int index = (int) (Math.random() * possibleSymbols.length);
-        return possibleSymbols[index];
     }
 }
