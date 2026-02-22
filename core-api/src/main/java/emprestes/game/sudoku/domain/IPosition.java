@@ -15,10 +15,6 @@ public interface IPosition extends Serializable, Comparable<IPosition> {
     /** @return the region. */
     IRegion getRegion();
 
-    default int regionSize() {
-        return getRegion().getSizePositions();
-    }
-
     /** @return the row. */
     IRow getRow();
 

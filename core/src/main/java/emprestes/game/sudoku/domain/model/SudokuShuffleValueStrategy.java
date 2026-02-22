@@ -7,7 +7,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class SudokuShuffleValueStrategy implements IShuffleValueStrategy, Serializable {
 
@@ -15,7 +15,11 @@ public class SudokuShuffleValueStrategy implements IShuffleValueStrategy, Serial
     private static final long serialVersionUID = -5450054276194144588L;
 
     @Override
-    public void shuffle(List<IPosition> positions, Function<Character[], List<Character>> symbols, Predicate<IPosition> visibility) {
+    public void shuffle(
+            List<IPosition> positions,
+            Function<Character[], List<Character>> symbols,
+            Supplier<Boolean> visibility
+    ) {
         shuffleWithBacktracking(positions, 0, symbols, visibility);
     }
 
@@ -23,7 +27,7 @@ public class SudokuShuffleValueStrategy implements IShuffleValueStrategy, Serial
             List<IPosition> positions,
             int index,
             Function<Character[], List<Character>> symbols,
-            Predicate<IPosition> visibility
+            Supplier<Boolean> visibility
     ) {
         if (index >= positions.size()) {
             return true;
@@ -38,7 +42,7 @@ public class SudokuShuffleValueStrategy implements IShuffleValueStrategy, Serial
             }
 
             position.setValue(symbol);
-            position.setVisible(visibility.test(position));
+            position.setVisible(visibility.get());
 
             if (shuffleWithBacktracking(positions, index + 1, symbols, visibility)) {
                 return true;
