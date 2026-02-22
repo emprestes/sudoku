@@ -7,8 +7,8 @@ package emprestes.game.sudoku.domain;
  * @since 02/2026
  */
 @FunctionalInterface
-public interface InitPosition {
+public interface IInitPosition {
 
     /** Initialize the provided position. */
-    void init(Position position);
+    void init(IPosition position);
 }

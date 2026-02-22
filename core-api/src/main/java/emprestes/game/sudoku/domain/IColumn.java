@@ -11,7 +11,7 @@ import static java.util.Set.of;
  * @author Dude
  * @since 02/2026
  */
-public interface Column extends Serializable, Comparable<Column> {
+public interface IColumn extends Serializable, Comparable<IColumn> {
 
     /** @return true if all positions are blank. */
     boolean isBlank();
@@ -28,7 +28,7 @@ public interface Column extends Serializable, Comparable<Column> {
     }
 
     /** Add a position to this column. */
-    void add(Position position);
+    void add(IPosition position);
 
     /** @return number of positions. */
     int getSizePositions();

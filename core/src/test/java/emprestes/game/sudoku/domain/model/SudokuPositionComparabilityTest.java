@@ -1,6 +1,6 @@
 package emprestes.game.sudoku.domain.model;
 
-import emprestes.game.sudoku.domain.Position;
+import emprestes.game.sudoku.domain.IPosition;
 import junitx.extensions.ComparabilityTestCase;
 
 public class SudokuPositionComparabilityTest extends ComparabilityTestCase {
@@ -10,7 +10,7 @@ public class SudokuPositionComparabilityTest extends ComparabilityTestCase {
     }
 
     @Override
-    protected Comparable<Position> createLessInstance() {
+    protected Comparable<IPosition> createLessInstance() {
         final byte regionNumber = 1;
         final byte rowNumber = 1;
         final byte columnNumber = 1;
@@ -19,7 +19,7 @@ public class SudokuPositionComparabilityTest extends ComparabilityTestCase {
     }
 
     @Override
-    protected Comparable<Position> createEqualInstance() {
+    protected Comparable<IPosition> createEqualInstance() {
         final byte regionNumber = 5;
         final byte rowNumber = 5;
         final byte columnNumber = 5;
@@ -28,7 +28,7 @@ public class SudokuPositionComparabilityTest extends ComparabilityTestCase {
     }
 
     @Override
-    protected Comparable<Position> createGreaterInstance() {
+    protected Comparable<IPosition> createGreaterInstance() {
         final byte regionNumber = 9;
         final byte rowNumber = 9;
         final byte columnNumber = 9;

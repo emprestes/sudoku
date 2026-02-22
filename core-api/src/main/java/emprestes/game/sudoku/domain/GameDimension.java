@@ -1,7 +1,7 @@
 package emprestes.game.sudoku.domain;
 
-import static emprestes.game.sudoku.domain.SymbolValues.V16;
-import static emprestes.game.sudoku.domain.SymbolValues.V9;
+import static emprestes.game.sudoku.domain.GameSymbol.V16;
+import static emprestes.game.sudoku.domain.GameSymbol.V9;
 
 /**
  * Supported Sudoku dimensions (e.g., 3x3 = 9x9, 4x4 = 16x16).
@@ -9,7 +9,7 @@ import static emprestes.game.sudoku.domain.SymbolValues.V9;
  * @author Dude
  * @since 02/2026
  */
-public enum Dimension {
+public enum GameDimension {
     D3X3(3, V9),
     D4X4(4, V16);
 
@@ -18,9 +18,9 @@ public enum Dimension {
 
     public final Byte size;
     public final Byte side;
-    public final SymbolValues symbols;
+    public final GameSymbol symbols;
 
-    Dimension(int side, SymbolValues symbols) {
+    GameDimension(int side, GameSymbol symbols) {
         this.side = (byte) side;
         this.size = symbols.size;
         this.symbols = symbols;

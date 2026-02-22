@@ -10,17 +10,20 @@ import java.io.Serializable;
  * @author Dude
  * @since 02/2026
  */
-public interface Position extends Serializable, Comparable<Position> {
+public interface IPosition extends Serializable, Comparable<IPosition> {
 
     /** @return the region. */
-    Region getRegion();
+    IRegion getRegion();
+
+    default int regionSize() {
+        return getRegion().getSizePositions();
+    }
 
     /** @return the row. */
-    Row getRow();
+    IRow getRow();
 
     /** @return the column. */
-    Column getColumn();
-
+    IColumn getColumn();
 
     /** @return current value. */
     Character getValue();
@@ -30,10 +33,6 @@ public interface Position extends Serializable, Comparable<Position> {
 
     /** Set the value. */
     void setValue(Character value);
-
-    default void setValue(Value value) {
-        setValue(value.getSymbol());
-    }
 
     /** Play a value with validation. */
     void play(Character value) throws WrongPositionException;
@@ -89,11 +88,11 @@ public interface Position extends Serializable, Comparable<Position> {
         return getValue().equals(value);
     }
 
-    default boolean hasChangedRegion(Position position) {
+    default boolean hasChangedRegion(IPosition position) {
         return hasChangedRegion(position.getRegion());
     }
 
-    default boolean hasChangedRegion(Region region) {
+    default boolean hasChangedRegion(IRegion region) {
         return getRegion().nonEquals(region);
     }
 }

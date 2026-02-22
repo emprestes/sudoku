@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toList;
  * @author Dude
  * @since 02/2026
  */
-public enum SymbolValues {
+public enum GameSymbol {
     V9(49, 50, 51, 52, 53, 54, 55, 56, 57),
     V16(49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71);
 
@@ -23,7 +23,7 @@ public enum SymbolValues {
     public final Byte size;
     private final Integer[] ascii;
 
-    SymbolValues(Integer... ascii) {
+    GameSymbol(Integer... ascii) {
         this.ascii = ascii;
         this.size = (byte) ascii.length;
     }

@@ -1,12 +1,14 @@
     package emprestes.game.sudoku.domain.model;
 
-    import emprestes.game.sudoku.domain.Board;
-    import emprestes.game.sudoku.domain.Column;
-    import emprestes.game.sudoku.domain.Dimension;
-    import emprestes.game.sudoku.domain.Position;
-    import emprestes.game.sudoku.domain.Region;
-    import emprestes.game.sudoku.domain.Row;
-    import emprestes.game.sudoku.domain.SymbolValues;
+    import emprestes.game.sudoku.domain.GameDimension;
+    import emprestes.game.sudoku.domain.GameSymbol;
+    import emprestes.game.sudoku.domain.GameVisibility;
+    import emprestes.game.sudoku.domain.IBoard;
+    import emprestes.game.sudoku.domain.IColumn;
+    import emprestes.game.sudoku.domain.IPosition;
+    import emprestes.game.sudoku.domain.IRegion;
+    import emprestes.game.sudoku.domain.IRow;
+    import emprestes.game.sudoku.domain.IShuffleValueStrategy;
     import emprestes.game.sudoku.domain.exception.PositionException;
     import emprestes.game.sudoku.domain.exception.PositionNotFoundException;
     import emprestes.game.sudoku.domain.exception.WrongPositionException;
@@ -18,12 +20,12 @@
     import java.util.Optional;
     import java.util.Set;
     import java.util.TreeSet;
-    import java.util.Random;
     import java.util.function.Consumer;
 
-    import static emprestes.game.sudoku.domain.Dimension.D3X3;
-    import static emprestes.game.sudoku.domain.SymbolValues.BLANK;
-    import static emprestes.game.sudoku.domain.SymbolValues.BREAK;
+    import static emprestes.game.sudoku.domain.GameDimension.D3X3;
+    import static emprestes.game.sudoku.domain.GameSymbol.BLANK;
+    import static emprestes.game.sudoku.domain.GameSymbol.BREAK;
+    import static emprestes.game.sudoku.domain.GameVisibility.EASY;
     import static java.lang.Math.max;
     import static java.util.Objects.hash;
     import static java.util.Objects.isNull;
@@ -35,40 +37,51 @@
  * @author Dude
  * @since 02/2026
  */
-public final class SudokuBoard implements Board {
+public final class SudokuBoard implements IBoard {
 
     @Serial
     private static final long serialVersionUID = 5804390727980289178L;
 
-    private final Dimension dimension;
-    private final SymbolValues symbols;
-    private final List<Region> regionList;
-    private final VisibilityMaskStrategy visibilityMaskStrategy;
+    private final GameDimension dimension;
 
-    private final List<Position> positionList = new ArrayList<>();
-    private final Set<Row> rowList = new TreeSet<>();
+    private final GameSymbol symbols;
+
+    private GameVisibility visibility;
+
+    private final IShuffleValueStrategy shuffleValueStrategy;
+
+    private final List<IRegion> regionList;
+
+    private final List<IPosition> positionList = new ArrayList<>();
+
+    private final Set<IRow> rowList = new TreeSet<>();
 
     public SudokuBoard() {
         this(D3X3);
     }
 
-    public SudokuBoard(Dimension dimension) {
-        this(dimension, new EasyVisibilityMaskStrategy(new Random()));
+    public SudokuBoard(GameDimension dimension) {
+        this(EASY, dimension);
     }
 
-    SudokuBoard(Dimension dimension, VisibilityMaskStrategy visibilityMaskStrategy) {
+    SudokuBoard(GameVisibility difficult, GameDimension dimension) {
         super();
 
+        this.visibility = difficult;
         this.dimension = dimension;
         this.symbols = dimension.symbols;
+        this.shuffleValueStrategy = new SudokuShuffleValueStrategy();
         this.regionList = new ArrayList<>(dimension.size);
-        this.visibilityMaskStrategy = visibilityMaskStrategy;
 
         init();
     }
 
     private void init() {
         init(regionList::add);
+    }
+
+    public void setVisibility(GameVisibility visibility) {
+        this.visibility = visibility;
     }
 
     /** {@inheritDoc} */
@@ -79,11 +92,11 @@ public final class SudokuBoard implements Board {
 
     /** {@inheritDoc} */
     @Override
-    public void init(Consumer<Region> action) {
+    public void init(Consumer<IRegion> action) {
         ofNullable(action).ifPresent(_action -> {
-            Region region = null;
-            Column column = null;
-            Row row = null;
+            IRegion region = null;
+            IColumn column = null;
+            IRow row = null;
             byte fromRow, toRow, fromColumn, toColumn;
 
             fromRow = fromColumn = dimension.from();
@@ -98,15 +111,15 @@ public final class SudokuBoard implements Board {
 
                 for (byte rowIndex = fromRow; rowIndex <= toRow; rowIndex++) {
                     final byte actualRowIndex = rowIndex;
-                    final Row actualRow = row;
-                    final Region finalRegion = region;
+                    final IRow actualRow = row;
+                    final IRegion finalRegion = region;
                     row = getRow(rowIndex)
                             .filter(region::nonExistsRow)
                             .map(region::add)
                             .orElseGet(() -> finalRegion.getRowOr(actualRowIndex, actualRow));
                     for (byte columnIndex = fromColumn; columnIndex <= toColumn; columnIndex++) {
                         final byte actualColumnIndex = columnIndex;
-                        final Column actualColumn = column;
+                        final IColumn actualColumn = column;
                         column = getColumn(columnIndex)
                                 .filter(region::nonExistsColumn)
                                 .map(region::add)
@@ -127,14 +140,14 @@ public final class SudokuBoard implements Board {
         });
     }
 
-    private Optional<Column> getColumn(byte number) {
+    private Optional<IColumn> getColumn(byte number) {
         return regionList.stream()
                 .filter(region -> region.existsColumn(number))
                 .map(region -> region.getColumnBy(number))
                 .findFirst();
     }
 
-    private Optional<Row> getRow(byte number) {
+    private Optional<IRow> getRow(byte number) {
         return regionList.stream()
                 .filter(region -> region.existsRow(number))
                 .map(region -> region.getRowBy(number))
@@ -149,45 +162,17 @@ public final class SudokuBoard implements Board {
     }
 
     private void clear() {
-        regionList.forEach(Region::clear);
+        regionList.forEach(IRegion::clear);
     }
 
     private void initValues() {
-        drawValuesTo(positionList);
-        visibilityMaskStrategy.apply(positionList);
-    }
-
-    private void drawValuesTo(List<Position> positions) {
-        drawWithBacktracking(positions, 0);
-    }
-
-    private boolean drawWithBacktracking(List<Position> positions, int index) {
-        if (index >= positions.size()) {
-            return true;
-        }
-
-        var position = positions.get(index);
-
-        var candidates = symbols.shuffle(position.usedSymbols());
-        for (Character symbol : candidates) {
-            if (position.isInvalidFor(symbol)) {
-                continue;
-            }
-
-            position.setValue(symbol);
-            if (drawWithBacktracking(positions, index + 1)) {
-                return true;
-            }
-            position.clear();
-        }
-
-        return false;
+        shuffleValueStrategy.shuffle(positionList, symbols::shuffle, visibility::isVisible);
     }
 
     /** {@inheritDoc} */
     @Override
     public void play(Character value, byte regionNumber, byte rowNumber, byte columnNumber) throws PositionException {
-        final Position position = regionList.stream()
+        final IPosition position = regionList.stream()
                 .filter(region -> region.equals(regionNumber))
                 .map(region -> region.getBy(rowNumber, columnNumber))
                 .filter(Optional::isPresent)
@@ -201,20 +186,20 @@ public final class SudokuBoard implements Board {
 
     /** {@inheritDoc} */
     @Override
-    public void play(Character value, Position position) throws WrongPositionException {
+    public void play(Character value, IPosition position) throws WrongPositionException {
         position.play(value);
     }
 
     @Override
     public boolean isGameOver() {
         return regionList.stream()
-                .map(Region::isCompleted)
+                .map(IRegion::isCompleted)
                 .reduce(true, ((result, isCompleted) -> result && isCompleted));
     }
 
     int getSizePositions() {
         return regionList.stream()
-                .map(Region::getSizePositions)
+                .map(IRegion::getSizePositions)
                 .reduce(0, Integer::sum);
     }
 
@@ -224,14 +209,14 @@ public final class SudokuBoard implements Board {
 
     int getSizeRows() {
         return regionList.stream()
-                .map(Region::getSizeRows)
+                .map(IRegion::getSizeRows)
                 .distinct()
                 .reduce(0, Integer::sum);
     }
 
     int getSizeColumns() {
         return regionList.stream()
-                .map(Region::getSizeColumns)
+                .map(IRegion::getSizeColumns)
                 .distinct()
                 .reduce(0, Integer::sum);
     }
@@ -257,7 +242,7 @@ public final class SudokuBoard implements Board {
         sb.append(horizontalLine);
 
         for (var row : rowList) {
-            Position previousPosition = null;
+            IPosition previousPosition = null;
 
             sb.append('|');
 

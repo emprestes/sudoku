@@ -12,7 +12,7 @@ import static java.util.Set.of;
  * @author Dude
  * @since 02/2026
  */
-public interface Region extends Serializable, Comparable<Region> {
+public interface IRegion extends Serializable, Comparable<IRegion> {
 
     /** @return region identifier (1-based). */
     Byte getNumber();
@@ -36,16 +36,16 @@ public interface Region extends Serializable, Comparable<Region> {
     boolean isCompleted();
 
     /** Create a position for the given row/column. */
-    Position createPositionFor(Row row, Column column);
+    IPosition createPositionFor(IRow row, IColumn column);
 
     /** Get a position by coordinates. */
-    Optional<Position> getBy(byte rowNumber, byte columnNumber);
+    Optional<IPosition> getBy(byte rowNumber, byte columnNumber);
 
-    Column add(Column column);
+    IColumn add(IColumn column);
 
     boolean existsColumn(byte number);
 
-    default boolean nonExistsColumn(Column column) {
+    default boolean nonExistsColumn(IColumn column) {
         return nonExistsColumn(column.getNumber());
     }
 
@@ -53,11 +53,11 @@ public interface Region extends Serializable, Comparable<Region> {
         return !existsColumn(number);
     }
 
-    Row add(Row row);
+    IRow add(IRow row);
 
     boolean existsRow(byte number);
 
-    default boolean nonExistsRow(Row row) {
+    default boolean nonExistsRow(IRow row) {
         return nonExistsRow(row.getNumber());
     }
 
@@ -65,13 +65,13 @@ public interface Region extends Serializable, Comparable<Region> {
         return !existsRow(number);
     }
 
-    Row getRowBy(byte number);
+    IRow getRowBy(byte number);
 
-    Row getRowOr(byte number, Row actualRow);
+    IRow getRowOr(byte number, IRow actualRow);
 
-    Column getColumnBy(byte number);
+    IColumn getColumnBy(byte number);
 
-    Column getColumnOr(byte number, Column actualColumn);
+    IColumn getColumnOr(byte number, IColumn actualColumn);
 
     int getSizePositions();
 
@@ -93,5 +93,5 @@ public interface Region extends Serializable, Comparable<Region> {
     }
 
     /** Create the next chained region in the given dimension. */
-    Region next(byte regionNumber, Dimension dimension);
+    IRegion next(byte regionNumber, GameDimension dimension);
 }

@@ -1,16 +1,17 @@
 package emprestes.game.sudoku.domain.model;
 
-import emprestes.game.sudoku.domain.Dimension;
-import emprestes.game.sudoku.domain.Position;
+import emprestes.game.sudoku.domain.GameDimension;
+import emprestes.game.sudoku.domain.IPosition;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static emprestes.game.sudoku.domain.Dimension.D3X3;
+import static emprestes.game.sudoku.domain.GameDimension.D3X3;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SudokuBoardTest {
@@ -19,7 +20,7 @@ public class SudokuBoardTest {
 
     @Test
     public void start3x3Test() {
-        board = new SudokuBoard(Dimension.D3X3);
+        board = new SudokuBoard(GameDimension.D3X3);
 
         board.start();
         System.out.println(board);
@@ -34,7 +35,7 @@ public class SudokuBoardTest {
 
     @Test
     public void start4x4Test() {
-        board = new SudokuBoard(Dimension.D4X4);
+        board = new SudokuBoard(GameDimension.D4X4);
 
         board.start();
         System.out.println(board);
@@ -49,7 +50,7 @@ public class SudokuBoardTest {
 
     @Test
     public void printSpacingShouldKeepSpaceAfterRegionSeparator() {
-        board = new SudokuBoard(Dimension.D3X3);
+        board = new SudokuBoard(GameDimension.D3X3);
         board.start();
 
         var lines = board.toString().lines()
@@ -67,7 +68,7 @@ public class SudokuBoardTest {
         board.start();
 
         int visiblePositions = getPositions(board).stream()
-                .filter(Position::isVisible)
+                .filter(IPosition::isVisible)
                 .mapToInt(_position -> 1)
                 .sum();
 
@@ -81,28 +82,28 @@ public class SudokuBoardTest {
 
         board.start();
         var firstMask = getPositions(board).stream()
-                .map(Position::isVisible)
+                .map(IPosition::isVisible)
                 .toList();
 
         board.start();
         var secondMask = getPositions(board).stream()
-                .map(Position::isVisible)
+                .map(IPosition::isVisible)
                 .toList();
 
-        assertFalse(firstMask.equals(secondMask));
+        assertNotEquals(firstMask, secondMask);
     }
 
     private void assertAllPositionsFilled(SudokuBoard board) {
-        assertTrue(getPositions(board).stream().allMatch(Position::nonBlank));
+        assertTrue(getPositions(board).stream().allMatch(IPosition::nonBlank));
     }
 
     @SuppressWarnings("unchecked")
-    private List<Position> getPositions(SudokuBoard board) {
+    private List<IPosition> getPositions(SudokuBoard board) {
         try {
             Field field = SudokuBoard.class.getDeclaredField("positionList");
             field.setAccessible(true);
 
-            return (List<Position>) field.get(board);
+            return (List<IPosition>) field.get(board);
         } catch (ReflectiveOperationException e) {
             throw new AssertionError("Could not inspect board positions", e);
         }

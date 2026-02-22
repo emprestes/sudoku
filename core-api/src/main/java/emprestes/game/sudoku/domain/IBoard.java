@@ -12,13 +12,13 @@ import java.util.function.Consumer;
  * @author Dude
  * @since 02/2026
  */
-public interface Board extends Serializable {
+public interface IBoard extends Serializable {
 
     /** @return board side length. */
     Byte getSide();
 
     /** Initialize regions/rows/columns applying the given action. */
-    void init(Consumer<Region> action);
+    void init(Consumer<IRegion> action);
 
     /** Clear and fill the board with valid values. */
     void start();
@@ -27,7 +27,7 @@ public interface Board extends Serializable {
     void play(Character value, byte regionNumber, byte rowNumber, byte columnNumber) throws PositionException;
 
     /** Make a move on a given position. */
-    void play(Character value, Position position) throws WrongPositionException;
+    void play(Character value, IPosition position) throws WrongPositionException;
 
     /** @return true if all positions are correctly filled. */
     boolean isGameOver();

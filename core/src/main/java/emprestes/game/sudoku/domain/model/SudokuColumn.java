@@ -1,8 +1,8 @@
 package emprestes.game.sudoku.domain.model;
 
-import emprestes.game.sudoku.domain.Column;
-import emprestes.game.sudoku.domain.Position;
-import emprestes.game.sudoku.domain.SymbolValues;
+import emprestes.game.sudoku.domain.IColumn;
+import emprestes.game.sudoku.domain.IPosition;
+import emprestes.game.sudoku.domain.GameSymbol;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ import static java.util.Objects.hash;
  * @author Dude
  * @since 02/2026
  */
-final class SudokuColumn implements Column {
+final class SudokuColumn implements IColumn {
 
     @Serial
     private static final long serialVersionUID = -6502322659899442632L;
 
     private final byte number;
-    private final List<Position> positions;
+    private final List<IPosition> positions;
 
     SudokuColumn(Byte number) {
         super();
@@ -33,7 +33,7 @@ final class SudokuColumn implements Column {
 
     @Override
     public boolean isBlank() {
-        return positions.stream().allMatch(Position::isBlank);
+        return positions.stream().allMatch(IPosition::isBlank);
     }
 
     @Override
@@ -44,13 +44,13 @@ final class SudokuColumn implements Column {
     @Override
     public Character[] toArrayValues() {
         return positions.stream()
-                .map(Position::getValue)
-                .filter(value -> !SymbolValues.BLANK.equals(value))
+                .map(IPosition::getValue)
+                .filter(value -> !GameSymbol.BLANK.equals(value))
                 .toArray(Character[]::new);
     }
 
     @Override
-    public void add(Position position) {
+    public void add(IPosition position) {
         positions.add(position);
     }
 
@@ -61,19 +61,19 @@ final class SudokuColumn implements Column {
 
     @Override
     public boolean isCompleted() {
-        return positions.stream().allMatch(Position::isVisible);
+        return positions.stream().allMatch(IPosition::isVisible);
     }
 
     @Override
     public boolean contains(Character value) {
         return positions.stream()
-                .filter(Position::nonBlank)
-                .map(Position::getValue)
+                .filter(IPosition::nonBlank)
+                .map(IPosition::getValue)
                 .anyMatch(_value -> _value.equals(value));
     }
 
     @Override
-    public int compareTo(Column other) {
+    public int compareTo(IColumn other) {
         return getNumber().compareTo(other.getNumber());
     }
 

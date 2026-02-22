@@ -2,8 +2,8 @@ package emprestes.game.sudoku.domain.model;
 
 import junitx.extensions.EqualsHashCodeTestCase;
 
-import static emprestes.game.sudoku.domain.Dimension.D3X3;
-import static emprestes.game.sudoku.domain.Dimension.D4X4;
+import static emprestes.game.sudoku.domain.GameDimension.D3X3;
+import static emprestes.game.sudoku.domain.GameDimension.D4X4;
 
 public class SudokuBoardEqualsHashCodeTest extends EqualsHashCodeTestCase {
 

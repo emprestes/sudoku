@@ -13,7 +13,7 @@ import static java.util.Set.of;
  * @author Dude
  * @since 02/2026
  */
-public interface Row extends Serializable, Comparable<Row> {
+public interface IRow extends Serializable, Comparable<IRow> {
 
     /** @return row number (1-based). */
     Byte getNumber();
@@ -27,10 +27,10 @@ public interface Row extends Serializable, Comparable<Row> {
     }
 
     /** Add a position to this row. */
-    void add(Position position);
+    void add(IPosition position);
 
     /** Execute an action for each position. */
-    void forEach(Consumer<Position> action);
+    void forEach(Consumer<IPosition> action);
 
     /** @return number of positions. */
     int getSizePositions();
@@ -48,5 +48,5 @@ public interface Row extends Serializable, Comparable<Row> {
         return equals(number.byteValue());
     }
 
-    List<Position> positionList();
+    List<IPosition> positionList();
 }

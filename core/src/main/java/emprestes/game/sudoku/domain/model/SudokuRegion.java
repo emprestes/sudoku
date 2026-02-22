@@ -1,11 +1,11 @@
 package emprestes.game.sudoku.domain.model;
 
-import emprestes.game.sudoku.domain.Column;
-import emprestes.game.sudoku.domain.Dimension;
-import emprestes.game.sudoku.domain.Position;
-import emprestes.game.sudoku.domain.Region;
-import emprestes.game.sudoku.domain.Row;
-import emprestes.game.sudoku.domain.SymbolValues;
+import emprestes.game.sudoku.domain.IColumn;
+import emprestes.game.sudoku.domain.GameDimension;
+import emprestes.game.sudoku.domain.IPosition;
+import emprestes.game.sudoku.domain.IRegion;
+import emprestes.game.sudoku.domain.IRow;
+import emprestes.game.sudoku.domain.GameSymbol;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static emprestes.game.sudoku.domain.Dimension.D3X3;
+import static emprestes.game.sudoku.domain.GameDimension.D3X3;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -22,22 +22,22 @@ import static java.util.Optional.ofNullable;
  * @author Dude
  * @since 02/2026
  */
-final class SudokuRegion implements Region {
+final class SudokuRegion implements IRegion {
 
     @Serial
     private static final long serialVersionUID = 527395914171821865L;
 
     private final byte number;
-    private final Dimension dimension;
-    private final List<Position> positions;
-    private final List<Column> columns;
-    private final List<Row> rows;
+    private final GameDimension dimension;
+    private final List<IPosition> positions;
+    private final List<IColumn> columns;
+    private final List<IRow> rows;
 
     SudokuRegion(Byte number) {
         this(number, D3X3);
     }
 
-    SudokuRegion(Byte number, Dimension dimension) {
+    SudokuRegion(Byte number, GameDimension dimension) {
         super();
 
         this.number = number;
@@ -48,7 +48,7 @@ final class SudokuRegion implements Region {
     }
 
     @Override
-    public Region next(byte regionNumber, Dimension dimension) {
+    public IRegion next(byte regionNumber, GameDimension dimension) {
         return new SudokuRegion(regionNumber, dimension);
     }
 
@@ -59,9 +59,9 @@ final class SudokuRegion implements Region {
 
     @Override
     public boolean isCompleted() {
-        boolean isCompleted = positions.stream().allMatch(Position::isVisible);
-        boolean isCompletedRow = rows.stream().allMatch(Row::isCompleted);
-        boolean isCompletedColumn = columns.stream().allMatch(Column::isCompleted);
+        boolean isCompleted = positions.stream().allMatch(IPosition::isVisible);
+        boolean isCompletedRow = rows.stream().allMatch(IRow::isCompleted);
+        boolean isCompletedColumn = columns.stream().allMatch(IColumn::isCompleted);
 
         return isCompleted && isCompletedRow && isCompletedColumn;
     }
@@ -69,8 +69,8 @@ final class SudokuRegion implements Region {
     @Override
     public boolean contains(Character value) {
         return positions.stream()
-                .filter(Position::nonBlank)
-                .map(Position::getValue)
+                .filter(IPosition::nonBlank)
+                .map(IPosition::getValue)
                 .anyMatch(_value -> _value.equals(value));
     }
 
@@ -80,13 +80,13 @@ final class SudokuRegion implements Region {
     }
 
     @Override
-    public Column getColumnBy(byte number) {
+    public IColumn getColumnBy(byte number) {
         return getColumn(number)
                 .orElse(null);
     }
 
     @Override
-    public Column getColumnOr(byte number, Column actualColumn) {
+    public IColumn getColumnOr(byte number, IColumn actualColumn) {
         return getColumn(number)
                 .orElseGet(() -> ofNullable(actualColumn)
                         .filter(column -> column.equals(number))
@@ -94,7 +94,7 @@ final class SudokuRegion implements Region {
                         .orElseGet(() -> newColumn(number)));
     }
 
-    private Optional<Column> getColumn(byte number) {
+    private Optional<IColumn> getColumn(byte number) {
         return columns.stream()
                 .filter(column -> column.equals(number))
                 .findFirst();
@@ -113,29 +113,29 @@ final class SudokuRegion implements Region {
     @Override
     public Character[] toArrayValues() {
         return positions.stream()
-                .map(Position::getValue)
-                .filter(value -> !SymbolValues.BLANK.equals(value))
+                .map(IPosition::getValue)
+                .filter(value -> !GameSymbol.BLANK.equals(value))
                 .toArray(Character[]::new);
     }
 
     @Override
     public void clear() {
-        positions.forEach(Position::clear);
+        positions.forEach(IPosition::clear);
     }
 
-    private Column newColumn(byte number) {
+    private IColumn newColumn(byte number) {
         return add(new SudokuColumn(number));
     }
 
     @Override
-    public Optional<Position> getBy(byte rowNumber, byte columnNumber) {
+    public Optional<IPosition> getBy(byte rowNumber, byte columnNumber) {
         return positions.stream()
                 .filter(position -> position.equals(number, rowNumber, columnNumber))
                 .findFirst();
     }
 
     @Override
-    public Column add(Column column) {
+    public IColumn add(IColumn column) {
         columns.add(column);
         return column;
     }
@@ -146,13 +146,13 @@ final class SudokuRegion implements Region {
     }
 
     @Override
-    public Row getRowBy(byte number) {
+    public IRow getRowBy(byte number) {
         return getRow(number)
                 .orElse(null);
     }
 
     @Override
-    public Row getRowOr(byte number, Row actualRow) {
+    public IRow getRowOr(byte number, IRow actualRow) {
         return getRow(number)
                 .orElseGet(() -> ofNullable(actualRow)
                         .filter(row -> row.equals(number))
@@ -160,7 +160,7 @@ final class SudokuRegion implements Region {
                         .orElseGet(() -> newRow(number)));
     }
 
-    private Optional<Row> getRow(byte number) {
+    private Optional<IRow> getRow(byte number) {
         return rows.stream()
                 .filter(row -> row.equals(number))
                 .findFirst();
@@ -171,19 +171,19 @@ final class SudokuRegion implements Region {
         return dimension.nextFromRow(row, regionIndex);
     }
 
-    private Row newRow(byte number) {
+    private IRow newRow(byte number) {
         return add(new SudokuRow(number));
     }
 
     @Override
-    public Row add(Row row) {
+    public IRow add(IRow row) {
         rows.add(row);
         return row;
     }
 
     @Override
-    public Position createPositionFor(Row row, Column column) {
-        final Position position = new SudokuPosition(this, row, column);
+    public IPosition createPositionFor(IRow row, IColumn column) {
+        final IPosition position = new SudokuPosition(this, row, column);
 
         positions.add(position);
         column.add(position);
@@ -200,7 +200,7 @@ final class SudokuRegion implements Region {
     @Override
     public int getSizeRows() {
         return rows.stream()
-                .map(Row::getSizePositions)
+                .map(IRow::getSizePositions)
                 .distinct()
                 .reduce(0, Integer::sum);
     }
@@ -208,13 +208,13 @@ final class SudokuRegion implements Region {
     @Override
     public int getSizeColumns() {
         return columns.stream()
-                .map(Column::getSizePositions)
+                .map(IColumn::getSizePositions)
                 .distinct()
                 .reduce(0, Integer::sum);
     }
 
     @Override
-    public int compareTo(Region other) {
+    public int compareTo(IRegion other) {
         return getNumber().compareTo(other.getNumber());
     }
 
