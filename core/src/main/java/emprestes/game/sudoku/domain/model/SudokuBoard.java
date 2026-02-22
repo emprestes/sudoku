@@ -270,7 +270,7 @@ public final class SudokuBoard implements IBoard {
             sb.append(BLANK).append('|');
 
             if (rowCounter++ % dimension.side == 0) {
-                sb.append(horizontalLine);
+                sb.append(BREAK).append(horizontalLine);
             } else {
                 sb.append(BREAK);
             }
@@ -280,7 +280,7 @@ public final class SudokuBoard implements IBoard {
     }
 
     private String createHorizontalLine(int boxSize) {
-        var line = new StringBuilder().append(BREAK);
+        var line = new StringBuilder();
 
         for (int i = 0; i < boxSize; i++) {
             line.append("+");
