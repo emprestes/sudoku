@@ -1,7 +1,7 @@
 package emprestes.game.sudoku.app.swing.view;
 
 import emprestes.game.sudoku.app.swing.component.PositionButton;
-import emprestes.game.sudoku.domain.IPosition;
+import emprestes.game.sudoku.app.swing.controller.GameController;
 import emprestes.game.sudoku.domain.IRegion;
 
 import javax.swing.JPanel;
@@ -15,12 +15,13 @@ public class RegionView extends JPanel {
 
     private final IRegion region;
     private final byte side;
+    private final GameController controller;
 
-    public RegionView(IRegion region, byte side) {
+    public RegionView(IRegion region, byte side, GameController controller) {
         super();
-
         this.region = region;
         this.side = side;
+        this.controller = controller;
 
         initComponents();
         init();
@@ -37,7 +38,7 @@ public class RegionView extends JPanel {
             if (region.existsRow(row)) {
                 region.getRowBy(row).positionList().stream()
                         .filter(position -> !position.hasChangedRegion(region))
-                        .forEach(position -> add(new PositionButton(position)));
+                        .forEach(position -> add(new PositionButton(position, controller)));
             }
         }
     }
