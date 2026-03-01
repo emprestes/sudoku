@@ -1,6 +1,6 @@
 package emprestes.game.sudoku.app.swing.component;
 
-import emprestes.game.sudoku.domain.Position;
+import emprestes.game.sudoku.domain.IPosition;
 
 import javax.swing.JButton;
 
@@ -10,9 +10,9 @@ public class PositionButton extends JButton {
 
     private static final long serialVersionUID = -2852955512595059549L;
 
-    private final Position position;
+    private final IPosition position;
 
-    public PositionButton(Position position) {
+    public PositionButton(IPosition position) {
         super();
 
         this.position = position;

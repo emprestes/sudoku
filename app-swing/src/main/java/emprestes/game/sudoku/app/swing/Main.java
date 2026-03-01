@@ -1,7 +1,7 @@
 package emprestes.game.sudoku.app.swing;
 
 import emprestes.game.sudoku.app.swing.view.GameView;
-import emprestes.game.sudoku.domain.Board;
+import emprestes.game.sudoku.domain.IBoard;
 import emprestes.game.sudoku.domain.model.SudokuBoard;
 import emprestes.game.sudoku.service.BoardService;
 import emprestes.game.sudoku.service.model.DefaultBoardService;
@@ -13,11 +13,7 @@ public class Main {
 
     private final JFrame gameView;
 
-    Main() {
-        this(new SudokuBoard());
-    }
-
-    Main(Board board) {
+    Main(IBoard board) {
         this(new DefaultBoardService(board));
     }
 
@@ -32,7 +28,7 @@ public class Main {
     }
 
     static Main getInstance() {
-        return new Main();
+        return new Main(new SudokuBoard());
     }
 
     public static void main(String[] args) {
