@@ -1,7 +1,8 @@
 package emprestes.game.sudoku.app.swing.view;
 
 import emprestes.game.sudoku.app.swing.component.ValueButton;
-import emprestes.game.sudoku.domain.Dimension;
+import emprestes.game.sudoku.domain.GameDimension;
+import emprestes.game.sudoku.domain.GameSymbol;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -13,14 +14,14 @@ public class ValueListView extends JPanel {
 
     private static final long serialVersionUID = 368856940315102671L;
 
-    private final Dimension dimension;
+    private final GameDimension dimension;
     private final List<ValueButton> values;
 
     ValueListView() {
-        this(Dimension.D3X3);
+        this(GameDimension.D3X3);
     }
 
-    ValueListView(Dimension dimension) {
+    ValueListView(GameDimension dimension) {
         super();
 
         this.dimension = dimension;
@@ -32,16 +33,7 @@ public class ValueListView extends JPanel {
     }
 
     private void initComponents() {
-        // FIXME Use dimension here
-        values.add(new ValueButton('1'));
-        values.add(new ValueButton('2'));
-        values.add(new ValueButton('3'));
-        values.add(new ValueButton('4'));
-        values.add(new ValueButton('5'));
-        values.add(new ValueButton('6'));
-        values.add(new ValueButton('7'));
-        values.add(new ValueButton('8'));
-        values.add(new ValueButton('9'));
+        dimension.symbols.forEach(symbol -> values.add(new ValueButton(symbol)));
     }
 
     private void initView() {
