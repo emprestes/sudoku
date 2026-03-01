@@ -1,17 +1,19 @@
 package emprestes.game.sudoku.service.model;
 
-import emprestes.game.sudoku.domain.Board;
-import emprestes.game.sudoku.domain.InitRegion;
-import emprestes.game.sudoku.domain.Position;
+import emprestes.game.sudoku.domain.IBoard;
+import emprestes.game.sudoku.domain.IPosition;
+import emprestes.game.sudoku.domain.IRegion;
 import emprestes.game.sudoku.domain.exception.PositionException;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 import emprestes.game.sudoku.service.BoardService;
 
+import java.util.function.Consumer;
+
 public final class DefaultBoardService implements BoardService {
 
-    private final Board board;
+    private final IBoard board;
 
-    public DefaultBoardService(Board board) {
+    public DefaultBoardService(IBoard board) {
         super();
 
         this.board = board;
@@ -23,7 +25,7 @@ public final class DefaultBoardService implements BoardService {
     }
 
     @Override
-    public Board getBoard() {
+    public IBoard getBoard() {
         return board;
     }
 
@@ -33,17 +35,17 @@ public final class DefaultBoardService implements BoardService {
     }
 
     @Override
-    public void start(InitRegion action) {
+    public void start(Consumer<IRegion> action) {
         board.init(action);
     }
 
     @Override
-    public void play(Character value, Byte region, Byte row, Byte column) throws PositionException {
+    public void play(Character value, byte region, byte row, byte column) throws PositionException {
         board.play(value, region, row, column);
     }
 
     @Override
-    public void play(Character value, Position position) throws WrongPositionException {
+    public void play(Character value, IPosition position) throws WrongPositionException {
         board.play(value, position);
     }
 

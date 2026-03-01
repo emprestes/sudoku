@@ -1,28 +1,30 @@
 package emprestes.game.sudoku.service;
 
-import emprestes.game.sudoku.domain.Board;
-import emprestes.game.sudoku.domain.InitRegion;
-import emprestes.game.sudoku.domain.Position;
+import emprestes.game.sudoku.domain.IBoard;
+import emprestes.game.sudoku.domain.IPosition;
+import emprestes.game.sudoku.domain.IRegion;
 import emprestes.game.sudoku.domain.exception.PositionException;
 import emprestes.game.sudoku.domain.exception.WrongPositionException;
 
+import java.util.function.Consumer;
+
 public interface BoardService {
 
-    Board getBoard();
+    IBoard getBoard();
 
     Byte getSide();
 
-    void start(InitRegion action);
+    void start(Consumer<IRegion> action);
 
     void start();
 
-    void play(Character value, Byte region, Byte row, Byte column) throws PositionException;
+    void play(Character value, byte region, byte row, byte column) throws PositionException;
 
-    default void play(Character value, Integer region, Integer row, Integer column) throws PositionException {
-        play(value, region.byteValue(), row.byteValue(), column.byteValue());
+    default void play(Character value, int region, int row, int column) throws PositionException {
+        play(value, (byte) region, (byte) row, (byte) column);
     }
 
-    void play(Character value, Position position) throws WrongPositionException;
+    void play(Character value, IPosition position) throws WrongPositionException;
 
     boolean isNotGameOver();
 }
