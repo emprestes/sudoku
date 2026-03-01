@@ -14,6 +14,7 @@ public class GameView extends JFrame {
     private static final long serialVersionUID = 2337305186388467101L;
 
     private JMenuBar menu;
+    private JPanel welcomeView;
     private JPanel boardView;
     private JPanel valueListView;
 
@@ -28,6 +29,7 @@ public class GameView extends JFrame {
 
     private void initComponents(BoardService service) {
         this.menu = new GameMenuBar();
+        this.welcomeView = new WelcomeView();
         this.boardView = new BoardView(service);
         this.valueListView = new ValueListView();
     }
@@ -39,8 +41,7 @@ public class GameView extends JFrame {
     private void initView() {
         setJMenuBar(menu);
         setLayout(new BorderLayout());
-        add(boardView, BorderLayout.CENTER);
-        add(valueListView, BorderLayout.NORTH);
+        add(welcomeView, BorderLayout.CENTER);
     }
 
     private void init() {
