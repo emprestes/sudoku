@@ -25,11 +25,14 @@
 
  <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  <maven.compiler.source>14</maven.compiler.source>
-  <maven.compiler.target>14</maven.compiler.target>
+  <maven.compiler.source>25</maven.compiler.source>
+  <maven.compiler.target>25</maven.compiler.target>
   <maven.compiler.vendor>openJDK</maven.compiler.vendor>
-  <maven.compiler.release>14</maven.compiler.release>
-  <junit.version>5.6.0</junit.version>
+  <maven.compiler.release>25</maven.compiler.release>
+  <maven.compiler.useModulePath>false</maven.compiler.useModulePath>
+  <junit4.version>4.13.2</junit4.version>
+  <junit4-addons.version>1.4</junit4-addons.version>
+  <junit5.version>5.10.3</junit5.version>
  </properties>
 
  <build>
@@ -37,19 +40,28 @@
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-compiler-plugin</artifactId>
-    <version>3.8.1</version>
+    <version>3.13.0</version>
+    <configuration>
+     <useModulePath>false</useModulePath>
+    </configuration>
+   </plugin>
+
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.2.5</version>
    </plugin>
 
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-jar-plugin</artifactId>
-    <version>3.1.2</version>
+    <version>3.3.0</version>
    </plugin>
 
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-toolchains-plugin</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <configuration>
      <toolchains>
       <jdk>
@@ -70,19 +82,19 @@
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-javadoc-plugin</artifactId>
-    <version>3.1.0</version>
+    <version>3.6.3</version>
    </plugin>
 
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-resources-plugin</artifactId>
-    <version>3.1.0</version>
+    <version>3.3.1</version>
    </plugin>
 
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-source-plugin</artifactId>
-    <version>3.1.0</version>
+    <version>3.3.0</version>
     <executions>
      <execution>
       <id>attach-sources</id>
@@ -101,18 +113,32 @@
   <module>service</module>
  </modules>
 
- <dependencies>
-  <dependency>
-   <groupId>org.junit.jupiter</groupId>
-   <artifactId>junit-jupiter-api</artifactId>
-   <version>${junit.version}</version>
-   <scope>test</scope>
-  </dependency>
-  <dependency>
-   <groupId>org.junit.jupiter</groupId>
-   <artifactId>junit-jupiter-engine</artifactId>
-   <version>${junit.version}</version>
-   <scope>test</scope>
-  </dependency>
- </dependencies>
+ <dependencyManagement>
+  <dependencies>
+   <dependency>
+    <groupId>org.junit.vintage</groupId>
+    <artifactId>junit-vintage-engine</artifactId>
+    <version>${junit5.version}</version>
+    <scope>test</scope>
+   </dependency>
+   <dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <version>${junit5.version}</version>
+    <scope>test</scope>
+   </dependency>
+   <dependency>
+    <groupId>junit-addons</groupId>
+    <artifactId>junit-addons</artifactId>
+    <version>${junit4-addons.version}</version>
+    <scope>test</scope>
+    <exclusions>
+     <exclusion>
+       <groupId>junit</groupId>
+       <artifactId>junit</artifactId>
+     </exclusion>
+    </exclusions>
+   </dependency>
+  </dependencies>
+ </dependencyManagement>
 </project>
