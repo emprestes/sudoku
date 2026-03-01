@@ -10,31 +10,31 @@ import emprestes.game.sudoku.service.model.DefaultBoardService;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class Main {
+public class Sudoku {
 
     private final JFrame gameView;
 
-    Main(IBoard board) {
+    Sudoku(IBoard board) {
         this(new DefaultBoardService(board));
     }
 
-    Main(BoardService service) {
+    Sudoku(BoardService service) {
         this(new GameView(service));
     }
 
-    Main(JFrame gameView) {
+    Sudoku(JFrame gameView) {
         super();
         this.gameView = gameView;
     }
 
-    static Main getInstance() {
+    static Sudoku getInstance() {
         IBoard board = new SudokuBoard();
         board.setVisibility(GameVisibility.EASY);
-        return new Main(board);
+        return new Sudoku(board);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Main.getInstance()::show);
+        SwingUtilities.invokeLater(Sudoku.getInstance()::show);
     }
 
     void show() {
