@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static emprestes.game.sudoku.domain.GameDimension.D3X3;
 import static java.util.Optional.ofNullable;
@@ -125,6 +126,11 @@ final class SudokuRegion implements IRegion {
 
     private IColumn newColumn(byte number) {
         return add(new SudokuColumn(number));
+    }
+
+    @Override
+    public void forEach(Consumer<IPosition> action) {
+        positions.forEach(action);
     }
 
     @Override

@@ -3,6 +3,7 @@ package emprestes.game.sudoku.domain;
 import java.io.Serializable;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static java.util.Set.of;
 
@@ -37,6 +38,9 @@ public interface IRegion extends Serializable, Comparable<IRegion> {
 
     /** Create a position for the given row/column. */
     IPosition createPositionFor(IRow row, IColumn column);
+
+    /** Execute an action for each position in this region. */
+    void forEach(Consumer<IPosition> action);
 
     /** Get a position by coordinates. */
     Optional<IPosition> getBy(byte rowNumber, byte columnNumber);
