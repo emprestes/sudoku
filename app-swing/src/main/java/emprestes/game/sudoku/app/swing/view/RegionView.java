@@ -32,14 +32,7 @@ public class RegionView extends JPanel {
         setBorder(createRaisedSoftBevelBorder());
     }
 
-    public void initComponents() {
-        final byte size = (byte) (side * side);
-        for (byte row = 1; row <= size; row++) {
-            if (region.existsRow(row)) {
-                region.getRowBy(row).positionList().stream()
-                        .filter(position -> !position.hasChangedRegion(region))
-                        .forEach(position -> add(new PositionButton(position, controller)));
-            }
-        }
+    private void initComponents() {
+        region.forEach(position -> add(new PositionButton(position, controller)));
     }
 }
