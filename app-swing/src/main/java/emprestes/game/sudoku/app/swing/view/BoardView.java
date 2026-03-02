@@ -20,8 +20,10 @@ public class BoardView extends JPanel {
     }
 
     private void initView() {
+        controller.getService().start();
+
         final byte side = controller.getService().getSide();
-        controller.getService().start(region -> add(new RegionView(region, side, controller)));
+        controller.getService().getBoard().forEachRegion(region -> add(new RegionView(region, side, controller)));
     }
 
     private void init() {
