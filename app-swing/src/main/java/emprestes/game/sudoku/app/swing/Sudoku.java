@@ -1,6 +1,7 @@
 package emprestes.game.sudoku.app.swing;
 
 import emprestes.game.sudoku.app.swing.view.GameView;
+import emprestes.game.sudoku.domain.GameVisibility;
 import emprestes.game.sudoku.domain.IBoard;
 import emprestes.game.sudoku.domain.model.SudokuBoard;
 import emprestes.game.sudoku.service.BoardService;
@@ -9,30 +10,31 @@ import emprestes.game.sudoku.service.model.DefaultBoardService;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class Main {
+public class Sudoku {
 
     private final JFrame gameView;
 
-    Main(IBoard board) {
+    Sudoku(IBoard board) {
         this(new DefaultBoardService(board));
     }
 
-    Main(BoardService service) {
+    Sudoku(BoardService service) {
         this(new GameView(service));
     }
 
-    Main(JFrame gameView) {
+    Sudoku(JFrame gameView) {
         super();
-
         this.gameView = gameView;
     }
 
-    static Main getInstance() {
-        return new Main(new SudokuBoard());
+    static Sudoku getInstance() {
+        IBoard board = new SudokuBoard();
+        board.setVisibility(GameVisibility.EASY);
+        return new Sudoku(board);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Main.getInstance()::show);
+        SwingUtilities.invokeLater(Sudoku.getInstance()::show);
     }
 
     void show() {
