@@ -157,6 +157,12 @@ public final class SudokuBoard implements IBoard {
 
     /** {@inheritDoc} */
     @Override
+    public void forEachRegion(Consumer<IRegion> action) {
+        regionList.forEach(action);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public void start() {
         clear();
         initValues();
