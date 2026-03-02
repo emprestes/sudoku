@@ -20,6 +20,9 @@ public interface IBoard extends Serializable {
     /** Initialize regions/rows/columns applying the given action. */
     void init(Consumer<IRegion> action);
 
+    /** Iterate already initialized regions without rebuilding the board. */
+    void forEachRegion(Consumer<IRegion> action);
+
     /** Clear and fill the board with valid values. */
     void start();
 
